@@ -64,11 +64,20 @@ export default function Block({ block, cellSize = CELL_SIZE }: BlockProps) {
       // 计算目标网格位置
       const targetPosition = calculateDragPosition(block, { x: deltaX, y: deltaY }, cellSize);
 
+      // 检查目标位置与当前有效位置的距离（防止跳跃穿越）
+      const [currentRow, currentCol] = currentValidPos.current;
+      const [targetRow, targetCol] = targetPosition;
+      const rowDiff = Math.abs(targetRow - currentRow);
+      const colDiff = Math.abs(targetCol - currentCol);
+      
+      // 只允许移动到相邻位置（最多相差1格，且只能横向或纵向移动）
+      const isAdjacentMove = (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1) || (rowDiff === 0 && colDiff === 0);
+
       // 检查目标位置是否合法（边界内且无碰撞）
-      const isValidMove = canMoveTo(block.id, targetPosition, blocks);
+      const isValidMove = isAdjacentMove && canMoveTo(block.id, targetPosition, blocks);
 
       if (isValidMove) {
-        // 如果目标位置合法，更新当前有效位置
+        // 如果目标位置合法且相邻，更新当前有效位置
         currentValidPos.current = targetPosition;
       }
 
