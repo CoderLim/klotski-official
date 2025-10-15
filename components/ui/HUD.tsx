@@ -7,11 +7,12 @@ import { formatTime } from '@/lib/utils/grid';
 
 export default function HUD() {
   const t = useTranslations();
-  const { currentPuzzle, moves, startTime, elapsedTime, setElapsedTime } = useGameStore();
+  const { currentPuzzle, moves, startTime, elapsedTime, isWin, setElapsedTime } = useGameStore();
 
   // 计时器
   useEffect(() => {
-    if (!startTime) return;
+    // 如果游戏还没开始或已经胜利，不启动计时器
+    if (!startTime || isWin) return;
 
     const interval = setInterval(() => {
       const now = Date.now();
@@ -20,7 +21,7 @@ export default function HUD() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, setElapsedTime]);
+  }, [startTime, isWin, setElapsedTime]);
 
   if (!currentPuzzle) return null;
 
