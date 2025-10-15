@@ -4,9 +4,14 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getAllPuzzles } from '@/lib/puzzles';
 import { PuzzleConfig } from '@/lib/puzzles/types';
+import PuzzlePreview from '@/components/game/PuzzlePreview';
 
 export default function HomePage() {
-  const puzzles = getAllPuzzles();
+  // 按困难度排序
+  const difficultyOrder = { easy: 1, medium: 2, hard: 3, expert: 4 };
+  const puzzles = getAllPuzzles().sort((a, b) => {
+    return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+  });
 
   const getDifficultyColor = (difficulty: PuzzleConfig['difficulty']) => {
     switch (difficulty) {
@@ -80,7 +85,7 @@ export default function HomePage() {
         </header>
 
         {/* 拼图选择 */}
-        <main className="max-w-6xl mx-auto px-4 pb-16">
+        <main className="max-w-7xl mx-auto px-4 pb-16">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -91,7 +96,7 @@ export default function HomePage() {
             <p className="text-gray-400">共 {puzzles.length} 个经典布局等你挑战</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {puzzles.map((puzzle, index) => (
               <motion.div
                 key={puzzle.slug}
@@ -100,34 +105,31 @@ export default function HomePage() {
                 transition={{ delay: 0.8 + index * 0.1, duration: 0.4 }}
               >
                 <Link href={`/p/${puzzle.slug}`}>
-                  <div className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border-2 border-gray-700 hover:border-yellow-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer">
+                  <div className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-4 border-2 border-gray-700 hover:border-yellow-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer">
                     {/* 难度标签 */}
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex justify-start mb-2">
                       <div
-                        className={`px-3 py-1 rounded-full text-sm font-semibold text-white bg-gradient-to-r ${getDifficultyColor(
+                        className={`px-2.5 py-0.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${getDifficultyColor(
                           puzzle.difficulty
                         )}`}
                       >
                         {getDifficultyLabel(puzzle.difficulty)}
                       </div>
-                      <div className="text-3xl group-hover:scale-110 transition-transform">
-                        🧩
-                      </div>
                     </div>
 
                     {/* 拼图名称 */}
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors text-center">
                       {puzzle.name}
                     </h3>
 
-                    {/* 方块数量 */}
-                    <p className="text-gray-400 text-sm mb-4">
-                      {puzzle.blocks.length} 个方块
-                    </p>
+                    {/* 棋局预览 */}
+                    <div className="mb-3">
+                      <PuzzlePreview puzzle={puzzle} size={140} />
+                    </div>
 
                     {/* 开始按钮 */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-yellow-400 font-semibold group-hover:translate-x-2 transition-transform">
+                    <div className="flex items-center justify-center">
+                      <span className="text-yellow-400 font-semibold group-hover:translate-x-2 transition-transform text-sm">
                         开始挑战 →
                       </span>
                     </div>
