@@ -1,6 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/routing';
 import Modal from './Modal';
 import { formatTime } from '@/lib/utils/grid';
 import { getAllPuzzles } from '@/lib/puzzles';
@@ -22,6 +23,7 @@ export default function WinDialog({
   currentSlug,
   onRestart,
 }: WinDialogProps) {
+  const t = useTranslations('win');
   const router = useRouter();
 
   // 查找下一个拼图
@@ -45,16 +47,16 @@ export default function WinDialog({
         </div>
 
         {/* 标题 */}
-        <h2 className="text-3xl font-bold text-yellow-400 mb-4">恭喜过关！</h2>
+        <h2 className="text-3xl font-bold text-yellow-400 mb-4">{t('title')}</h2>
 
         {/* 统计数据 */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
-            <div className="text-gray-400 text-sm mb-1">移动步数</div>
+            <div className="text-gray-400 text-sm mb-1">{t('moves')}</div>
             <div className="text-3xl font-bold text-white">{moves}</div>
           </div>
           <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
-            <div className="text-gray-400 text-sm mb-1">用时</div>
+            <div className="text-gray-400 text-sm mb-1">{t('time')}</div>
             <div className="text-3xl font-bold text-white">{formatTime(time)}</div>
           </div>
         </div>
@@ -64,25 +66,25 @@ export default function WinDialog({
           <button
             onClick={onRestart}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95"
-            aria-label="再来一次"
+            aria-label={t('playAgain')}
           >
-            再来一次
+            {t('playAgain')}
           </button>
           {nextPuzzle ? (
             <button
               onClick={handleNextPuzzle}
               className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95"
-              aria-label="下一关"
+              aria-label={t('nextLevel')}
             >
-              下一关 →
+              {t('nextLevel')} →
             </button>
           ) : (
             <button
               onClick={() => router.push('/')}
               className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95"
-              aria-label="返回首页"
+              aria-label={t('backHome')}
             >
-              返回首页
+              {t('backHome')}
             </button>
           )}
         </div>
@@ -90,4 +92,3 @@ export default function WinDialog({
     </Modal>
   );
 }
-

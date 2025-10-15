@@ -1,12 +1,16 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { getAllPuzzles } from '@/lib/puzzles';
 import { PuzzleConfig } from '@/lib/puzzles/types';
 import PuzzlePreview from '@/components/game/PuzzlePreview';
+import { Link } from '@/i18n/routing';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
 export default function HomePage() {
+  const t = useTranslations();
+
   // 按困难度排序
   const difficultyOrder = { easy: 1, medium: 2, hard: 3, expert: 4 };
   const puzzles = getAllPuzzles().sort((a, b) => {
@@ -29,18 +33,7 @@ export default function HomePage() {
   };
 
   const getDifficultyLabel = (difficulty: PuzzleConfig['difficulty']) => {
-    switch (difficulty) {
-      case 'easy':
-        return '简单';
-      case 'medium':
-        return '中等';
-      case 'hard':
-        return '困难';
-      case 'expert':
-        return '专家';
-      default:
-        return '未知';
-    }
+    return t(`difficulty.${difficulty}`);
   };
 
   return (
@@ -54,6 +47,10 @@ export default function HomePage() {
       <div className="relative z-10">
         {/* 头部 */}
         <header className="text-center pt-12 pb-8 px-4">
+          <div className="flex justify-end mb-4 px-4">
+            <LanguageSwitcher />
+          </div>
+
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,7 +58,7 @@ export default function HomePage() {
             className="text-6xl md:text-8xl font-bold mb-4"
           >
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 drop-shadow-2xl">
-              华容道
+              {t('common.appName')}
             </span>
           </motion.h1>
           
@@ -71,7 +68,7 @@ export default function HomePage() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-xl md:text-2xl text-gray-300 mb-2"
           >
-            Klotski Puzzle Game
+            {t('common.subtitle')}
           </motion.p>
 
           <motion.p
@@ -80,7 +77,7 @@ export default function HomePage() {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="text-gray-400 max-w-2xl mx-auto"
           >
-            中国传统益智游戏，移动方块让曹操从华容道逃脱
+            {t('common.description')}
           </motion.p>
         </header>
 
@@ -92,8 +89,8 @@ export default function HomePage() {
             transition={{ delay: 0.7, duration: 0.6 }}
             className="mb-8 text-center"
           >
-            <h2 className="text-3xl font-bold text-white mb-2">选择关卡</h2>
-            <p className="text-gray-400">共 {puzzles.length} 个经典布局等你挑战</p>
+            <h2 className="text-3xl font-bold text-white mb-2">{t('home.selectLevel')}</h2>
+            <p className="text-gray-400">{t('home.totalPuzzles', { count: puzzles.length })}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -130,7 +127,7 @@ export default function HomePage() {
                     {/* 开始按钮 */}
                     <div className="flex items-center justify-center">
                       <span className="text-yellow-400 font-semibold group-hover:translate-x-2 transition-transform text-sm">
-                        开始挑战 →
+                        {t('home.startChallenge')} →
                       </span>
                     </div>
                   </div>
@@ -142,8 +139,8 @@ export default function HomePage() {
 
         {/* 页脚 */}
         <footer className="text-center py-8 px-4 text-gray-500 text-sm">
-          <p>© 2024 华容道 Klotski Game | 使用 Next.js 14 + TypeScript + Zustand 构建</p>
-          <p className="mt-2">支持鼠标拖拽、触摸操作和键盘控制</p>
+          <p>{t('home.footer')}</p>
+          <p className="mt-2">{t('home.footerSupport')}</p>
         </footer>
       </div>
     </div>

@@ -19,6 +19,7 @@
 
 - 🎮 **完整游戏体验** - 支持鼠标拖拽、触摸操作和键盘控制
 - 🧩 **6+ 经典布局** - 横刀立马、近在咫尺、层层设防等经典关卡
+- 🌍 **多语言支持** - 支持中文、英文、日文、西班牙语、葡萄牙语、韩语（默认英文）
 - 🎯 **智能检测** - 实时碰撞检测、边界约束、胜利判定
 - ⏱️ **进度追踪** - 移动步数、计时器、历史记录
 - 🔄 **撤销/重做** - 完整的操作历史管理
@@ -106,21 +107,35 @@ npm run test:coverage
 ```
 klotski-official/
 ├── app/                      # Next.js App Router
+│   ├── [locale]/            # 多语言路由
+│   │   ├── layout.tsx       # 语言布局
+│   │   ├── page.tsx         # 首页（关卡选择）
+│   │   └── p/[slug]/page.tsx # 游戏页面
 │   ├── layout.tsx           # 根布局
-│   ├── page.tsx             # 首页（关卡选择）
-│   ├── p/[slug]/page.tsx    # 游戏页面
 │   └── globals.css          # 全局样式
 ├── components/              # React 组件
 │   ├── game/
 │   │   ├── Board.tsx        # 游戏棋盘
-│   │   └── Block.tsx        # 可拖拽方块
+│   │   ├── Block.tsx        # 可拖拽方块
+│   │   └── PuzzlePreview.tsx # 拼图预览
 │   └── ui/
 │       ├── HUD.tsx          # 状态显示
 │       ├── Controls.tsx     # 控制按钮
 │       ├── Modal.tsx        # 通用弹窗
 │       ├── WinDialog.tsx    # 胜利对话框
 │       ├── HelpDialog.tsx   # 帮助说明
-│       └── Confetti.tsx     # 胜利特效
+│       ├── Confetti.tsx     # 胜利特效
+│       └── LanguageSwitcher.tsx # 语言切换器
+├── i18n/                    # 国际化配置
+│   ├── request.ts           # i18n 配置
+│   └── routing.ts           # 路由配置
+├── messages/                # 翻译文件
+│   ├── en.json              # 英文
+│   ├── zh.json              # 中文
+│   ├── ja.json              # 日文
+│   ├── es.json              # 西班牙语
+│   ├── pt.json              # 葡萄牙语
+│   └── ko.json              # 韩语
 ├── lib/                     # 核心逻辑
 │   ├── puzzles/
 │   │   ├── types.ts         # 类型定义
@@ -140,6 +155,7 @@ klotski-official/
 │   └── sounds/              # 音效文件
 ├── __tests__/               # 单元测试
 │   └── engine.test.ts
+├── middleware.ts            # 国际化中间件
 ├── tailwind.config.ts       # Tailwind 配置
 ├── vitest.config.ts         # 测试配置
 └── package.json
@@ -201,8 +217,9 @@ export const PUZZLES: Record<string, PuzzleConfig> = {
 
 ## 🛠️ 技术栈
 
-- **框架**: Next.js 14 (App Router)
+- **框架**: Next.js 15 (App Router)
 - **语言**: TypeScript 5
+- **国际化**: next-intl
 - **状态管理**: Zustand + Immer
 - **样式**: Tailwind CSS 4
 - **动画**: Framer Motion
@@ -248,15 +265,35 @@ export const PUZZLES: Record<string, PuzzleConfig> = {
 - 组件使用函数式 + Hooks
 - 添加必要的注释和类型
 
+## 🌍 多语言支持
+
+项目已支持 6 种语言：
+
+| 语言 | 代码 | 状态 |
+|------|------|------|
+| 🇬🇧 English | `en` | ✅ 默认 |
+| 🇨🇳 简体中文 | `zh` | ✅ |
+| 🇯🇵 日本語 | `ja` | ✅ |
+| 🇪🇸 Español | `es` | ✅ |
+| 🇵🇹 Português | `pt` | ✅ |
+| 🇰🇷 한국어 | `ko` | ✅ |
+
+访问不同语言版本：
+- 英文: `http://localhost:3000/en`
+- 中文: `http://localhost:3000/zh`
+- 日文: `http://localhost:3000/ja`
+
+详细的国际化指南请查看 [I18N_GUIDE.md](I18N_GUIDE.md)
+
 ## 📝 待办事项
 
+- [x] 国际化（英文、中文、日文、西班牙语、葡萄牙语、韩语）
 - [ ] 添加更多经典布局（10+）
 - [ ] 实现自动求解器（AI）
 - [ ] 添加多人对战模式
 - [ ] 支持自定义拼图编辑器
 - [ ] 排行榜功能（最少步数/最短时间）
 - [ ] PWA 支持（离线可用）
-- [ ] 国际化（英文、日文等）
 - [ ] 提示系统（显示可能的移动）
 
 ## 📄 许可证

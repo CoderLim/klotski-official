@@ -1,0 +1,66 @@
+{
+  "common": {
+    "appName": "클로츠키",
+    "subtitle": "중국 전통 슬라이딩 블록 퍼즐",
+    "description": "블록을 움직여 조조가 화용도를 탈출하도록 도와주세요"
+  },
+  "difficulty": {
+    "easy": "쉬움",
+    "medium": "보통",
+    "hard": "어려움",
+    "expert": "전문가"
+  },
+  "home": {
+    "selectLevel": "레벨 선택",
+    "totalPuzzles": "도전할 {count}개의 클래식 레이아웃",
+    "startChallenge": "도전 시작",
+    "footer": "© 2024 클로츠키 게임 | Next.js 15 + TypeScript + Zustand로 제작",
+    "footerSupport": "마우스 드래그, 터치 및 키보드 컨트롤 지원"
+  },
+  "hud": {
+    "moves": "이동",
+    "time": "시간"
+  },
+  "controls": {
+    "undo": "실행 취소",
+    "redo": "다시 실행",
+    "reset": "재설정",
+    "help": "도움말",
+    "mute": "음소거",
+    "unmute": "소리 켜기",
+    "home": "홈",
+    "resetConfirm": "현재 퍼즐을 재설정하시겠습니까? 모든 진행 상황이 손실됩니다."
+  },
+  "help": {
+    "title": "게임 도움말",
+    "goal": "게임 목표",
+    "goalDescription": "빨간색 조조 블록(2×2)을 보드 하단 중앙의 출구(4-5행, 2-3열)로 이동하면 승리합니다.",
+    "controls": "컨트롤",
+    "controlsMouse": "마우스/터치:",
+    "controlsMouseDesc": "블록을 드래그하여 이동",
+    "controlsKeyboard": "키보드:",
+    "controlsKeyboardTab": "Tab/Shift+Tab: 선택된 블록 전환",
+    "controlsKeyboardArrow": "화살표 키: 선택된 블록 이동",
+    "controlsKeyboardEnter": "Enter: 선택/선택 해제",
+    "shortcuts": "단축키",
+    "shortcutUndo": "실행 취소",
+    "shortcutRedo": "다시 실행",
+    "shortcutReset": "재설정",
+    "shortcutClose": "대화 상자 닫기",
+    "blocks": "블록 유형",
+    "blockCaocao": "조조 (2×2)",
+    "blockVertical": "세로 (2×1)",
+    "blockHorizontal": "가로 (1×2)",
+    "blockSoldier": "병사 (1×1)",
+    "gotIt": "알겠습니다"
+  },
+  "win": {
+    "title": "축하합니다!",
+    "moves": "이동",
+    "time": "시간",
+    "playAgain": "다시 플레이",
+    "nextLevel": "다음 레벨",
+    "backHome": "홈으로 돌아가기"
+  }
+}
+

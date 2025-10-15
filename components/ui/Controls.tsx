@@ -1,17 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/routing';
 import { useGameStore } from '@/lib/store/useGameStore';
 import HelpDialog from './HelpDialog';
 
 export default function Controls() {
+  const t = useTranslations('controls');
   const router = useRouter();
   const { canUndo, canRedo, undo, redo, reset, isMuted, toggleMute } = useGameStore();
   const [showHelp, setShowHelp] = useState(false);
 
   const handleReset = () => {
-    if (confirm('确定要重置当前拼图吗？所有进度将被清除。')) {
+    if (confirm(t('resetConfirm'))) {
       reset();
     }
   };
@@ -30,10 +32,10 @@ export default function Controls() {
                   ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-blue-500/50'
                   : 'bg-gray-700 text-gray-500 cursor-not-allowed'
               }`}
-              aria-label="撤销 (U)"
-              title="撤销 (U)"
+              aria-label={`${t('undo')} (U)`}
+              title={`${t('undo')} (U)`}
             >
-              ↶ 撤销
+              ↶ {t('undo')}
             </button>
 
             {/* 重做 */}
@@ -45,37 +47,37 @@ export default function Controls() {
                   ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-blue-500/50'
                   : 'bg-gray-700 text-gray-500 cursor-not-allowed'
               }`}
-              aria-label="重做 (R)"
-              title="重做 (R)"
+              aria-label={`${t('redo')} (R)`}
+              title={`${t('redo')} (R)`}
             >
-              ↷ 重做
+              ↷ {t('redo')}
             </button>
 
             {/* 重置 */}
             <button
               onClick={handleReset}
               className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-orange-500/50"
-              aria-label="重置"
-              title="重置 (Ctrl+R)"
+              aria-label={t('reset')}
+              title={`${t('reset')} (Ctrl+R)`}
             >
-              🔄 重置
+              🔄 {t('reset')}
             </button>
 
             {/* 帮助 */}
             <button
               onClick={() => setShowHelp(true)}
               className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-purple-500/50"
-              aria-label="帮助"
+              aria-label={t('help')}
             >
-              ❓ 帮助
+              ❓ {t('help')}
             </button>
 
             {/* 静音 */}
             <button
               onClick={toggleMute}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95"
-              aria-label={isMuted ? '开启声音' : '静音'}
-              title={isMuted ? '开启声音' : '静音'}
+              aria-label={isMuted ? t('unmute') : t('mute')}
+              title={isMuted ? t('unmute') : t('mute')}
             >
               {isMuted ? '🔇' : '🔊'}
             </button>
@@ -84,9 +86,9 @@ export default function Controls() {
             <button
               onClick={() => router.push('/')}
               className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-green-500/50"
-              aria-label="返回首页"
+              aria-label={t('home')}
             >
-              🏠 首页
+              🏠 {t('home')}
             </button>
           </div>
         </div>
@@ -97,4 +99,3 @@ export default function Controls() {
     </>
   );
 }
-

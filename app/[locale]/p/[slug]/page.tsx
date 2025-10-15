@@ -1,7 +1,8 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/routing';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { getPuzzleBySlug } from '@/lib/puzzles';
 import HUD from '@/components/ui/HUD';
@@ -12,12 +13,13 @@ import Confetti from '@/components/ui/Confetti';
 import { playSound, setMuted } from '@/lib/utils/sound';
 
 interface GamePageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export default function GamePage({ params }: GamePageProps) {
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
+  const t = useTranslations('controls');
   const router = useRouter();
   const {
     loadPuzzle,
@@ -81,7 +83,7 @@ export default function GamePage({ params }: GamePageProps) {
         case 'r':
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault();
-            if (confirm('确定要重置当前拼图吗？')) {
+            if (confirm(t('resetConfirm'))) {
               reset();
             }
           } else {
@@ -94,12 +96,12 @@ export default function GamePage({ params }: GamePageProps) {
 
     window.addEventListener('keydown', handleGlobalKeys);
     return () => window.removeEventListener('keydown', handleGlobalKeys);
-  }, [undo, redo, reset]);
+  }, [undo, redo, reset, t]);
 
   if (!currentPuzzle) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-        <div className="text-white text-2xl">加载中...</div>
+        <div className="text-white text-2xl">Loading...</div>
       </div>
     );
   }
@@ -136,4 +138,3 @@ export default function GamePage({ params }: GamePageProps) {
     </div>
   );
 }
-

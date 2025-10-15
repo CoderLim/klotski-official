@@ -1,0 +1,66 @@
+{
+  "common": {
+    "appName": "箱入り娘",
+    "subtitle": "中国の伝統的なスライディングブロックパズル",
+    "description": "ブロックを動かして曹操を華容道から脱出させよう"
+  },
+  "difficulty": {
+    "easy": "簡単",
+    "medium": "普通",
+    "hard": "難しい",
+    "expert": "エキスパート"
+  },
+  "home": {
+    "selectLevel": "レベル選択",
+    "totalPuzzles": "{count}個のクラシックレイアウトに挑戦",
+    "startChallenge": "挑戦開始",
+    "footer": "© 2024 箱入り娘 | Next.js 15 + TypeScript + Zustandで構築",
+    "footerSupport": "マウスドラッグ、タッチ、キーボード操作に対応"
+  },
+  "hud": {
+    "moves": "手数",
+    "time": "時間"
+  },
+  "controls": {
+    "undo": "元に戻す",
+    "redo": "やり直す",
+    "reset": "リセット",
+    "help": "ヘルプ",
+    "mute": "ミュート",
+    "unmute": "音声オン",
+    "home": "ホーム",
+    "resetConfirm": "現在のパズルをリセットしてもよろしいですか？すべての進行状況が失われます。"
+  },
+  "help": {
+    "title": "ゲームヘルプ",
+    "goal": "ゲーム目標",
+    "goalDescription": "赤い曹操ブロック（2×2）をボードの下部中央の出口（4-5行、2-3列）に移動させると勝利です。",
+    "controls": "操作方法",
+    "controlsMouse": "マウス/タッチ：",
+    "controlsMouseDesc": "ブロックをドラッグして移動",
+    "controlsKeyboard": "キーボード：",
+    "controlsKeyboardTab": "Tab/Shift+Tab：選択ブロックの切り替え",
+    "controlsKeyboardArrow": "矢印キー：選択したブロックを移動",
+    "controlsKeyboardEnter": "Enter：選択/選択解除",
+    "shortcuts": "ショートカット",
+    "shortcutUndo": "元に戻す",
+    "shortcutRedo": "やり直す",
+    "shortcutReset": "リセット",
+    "shortcutClose": "ダイアログを閉じる",
+    "blocks": "ブロックタイプ",
+    "blockCaocao": "曹操 (2×2)",
+    "blockVertical": "縦将 (2×1)",
+    "blockHorizontal": "横将 (1×2)",
+    "blockSoldier": "小兵 (1×1)",
+    "gotIt": "了解"
+  },
+  "win": {
+    "title": "おめでとうございます！",
+    "moves": "手数",
+    "time": "時間",
+    "playAgain": "もう一度",
+    "nextLevel": "次のレベル",
+    "backHome": "ホームに戻る"
+  }
+}
+

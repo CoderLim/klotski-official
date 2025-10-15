@@ -1,0 +1,66 @@
+{
+  "common": {
+    "appName": "Klotski",
+    "subtitle": "Jogo chinês tradicional de blocos deslizantes",
+    "description": "Mova os blocos para ajudar Cao Cao a escapar pela Passagem de Huarong"
+  },
+  "difficulty": {
+    "easy": "Fácil",
+    "medium": "Médio",
+    "hard": "Difícil",
+    "expert": "Especialista"
+  },
+  "home": {
+    "selectLevel": "Selecionar Nível",
+    "totalPuzzles": "{count} layouts clássicos para desafiar",
+    "startChallenge": "Iniciar Desafio",
+    "footer": "© 2024 Klotski Game | Construído com Next.js 15 + TypeScript + Zustand",
+    "footerSupport": "Suporta arrastar com mouse, toque e controles de teclado"
+  },
+  "hud": {
+    "moves": "Movimentos",
+    "time": "Tempo"
+  },
+  "controls": {
+    "undo": "Desfazer",
+    "redo": "Refazer",
+    "reset": "Reiniciar",
+    "help": "Ajuda",
+    "mute": "Silenciar",
+    "unmute": "Ativar som",
+    "home": "Início",
+    "resetConfirm": "Tem certeza de que deseja reiniciar o puzzle atual? Todo o progresso será perdido."
+  },
+  "help": {
+    "title": "Ajuda do Jogo",
+    "goal": "Objetivo do Jogo",
+    "goalDescription": "Mova o bloco vermelho de Cao Cao (2×2) para a saída no centro inferior do tabuleiro (linhas 4-5, colunas 2-3) para vencer.",
+    "controls": "Controles",
+    "controlsMouse": "Mouse/Toque:",
+    "controlsMouseDesc": "Arraste os blocos para movê-los",
+    "controlsKeyboard": "Teclado:",
+    "controlsKeyboardTab": "Tab/Shift+Tab: Alternar bloco selecionado",
+    "controlsKeyboardArrow": "Teclas de seta: Mover bloco selecionado",
+    "controlsKeyboardEnter": "Enter: Selecionar/Desselecionar",
+    "shortcuts": "Atalhos",
+    "shortcutUndo": "Desfazer",
+    "shortcutRedo": "Refazer",
+    "shortcutReset": "Reiniciar",
+    "shortcutClose": "Fechar diálogo",
+    "blocks": "Tipos de Blocos",
+    "blockCaocao": "Cao Cao (2×2)",
+    "blockVertical": "Vertical (2×1)",
+    "blockHorizontal": "Horizontal (1×2)",
+    "blockSoldier": "Soldado (1×1)",
+    "gotIt": "Entendi"
+  },
+  "win": {
+    "title": "Parabéns!",
+    "moves": "Movimentos",
+    "time": "Tempo",
+    "playAgain": "Jogar Novamente",
+    "nextLevel": "Próximo Nível",
+    "backHome": "Voltar ao Início"
+  }
+}
+

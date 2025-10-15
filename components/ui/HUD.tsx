@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { formatTime } from '@/lib/utils/grid';
 
 export default function HUD() {
+  const t = useTranslations();
   const { currentPuzzle, moves, startTime, elapsedTime, setElapsedTime } = useGameStore();
 
   // 计时器
@@ -22,13 +24,17 @@ export default function HUD() {
 
   if (!currentPuzzle) return null;
 
+  const getDifficultyLabel = () => {
+    return t(`difficulty.${currentPuzzle.difficulty}`);
+  };
+
   return (
     <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b-4 border-yellow-500 shadow-lg">
       <div className="max-w-4xl mx-auto px-4 py-4">
         {/* 顶部：拼图名称 */}
         <div className="text-center mb-3">
           <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-lg">
-            华容道
+            {t('common.appName')}
           </h1>
           <div className="flex items-center justify-center gap-2 mt-1">
             <span className="text-lg text-gray-300">{currentPuzzle.name}</span>
@@ -43,13 +49,7 @@ export default function HUD() {
                   : 'bg-red-600 text-white'
               }`}
             >
-              {currentPuzzle.difficulty === 'easy'
-                ? '简单'
-                : currentPuzzle.difficulty === 'medium'
-                ? '中等'
-                : currentPuzzle.difficulty === 'hard'
-                ? '困难'
-                : '专家'}
+              {getDifficultyLabel()}
             </span>
           </div>
         </div>
@@ -62,7 +62,7 @@ export default function HUD() {
               👣
             </span>
             <div>
-              <div className="text-xs text-gray-400">步数</div>
+              <div className="text-xs text-gray-400">{t('hud.moves')}</div>
               <div className="text-xl font-bold text-white">{moves}</div>
             </div>
           </div>
@@ -73,7 +73,7 @@ export default function HUD() {
               ⏱️
             </span>
             <div>
-              <div className="text-xs text-gray-400">用时</div>
+              <div className="text-xs text-gray-400">{t('hud.time')}</div>
               <div className="text-xl font-bold text-white font-mono">
                 {formatTime(elapsedTime)}
               </div>
@@ -84,4 +84,3 @@ export default function HUD() {
     </div>
   );
 }
-

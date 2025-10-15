@@ -1,0 +1,66 @@
+{
+  "common": {
+    "appName": "Klotski",
+    "subtitle": "Chinese Traditional Sliding Block Puzzle",
+    "description": "Move blocks to help Cao Cao escape through Huarong Pass"
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "expert": "Expert"
+  },
+  "home": {
+    "selectLevel": "Select Level",
+    "totalPuzzles": "{count} classic layouts to challenge",
+    "startChallenge": "Start Challenge",
+    "footer": "© 2024 Klotski Game | Built with Next.js 15 + TypeScript + Zustand",
+    "footerSupport": "Support mouse drag, touch and keyboard controls"
+  },
+  "hud": {
+    "moves": "Moves",
+    "time": "Time"
+  },
+  "controls": {
+    "undo": "Undo",
+    "redo": "Redo",
+    "reset": "Reset",
+    "help": "Help",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "home": "Home",
+    "resetConfirm": "Are you sure you want to reset the current puzzle? All progress will be lost."
+  },
+  "help": {
+    "title": "Game Help",
+    "goal": "Game Objective",
+    "goalDescription": "Move the red Cao Cao block (2×2) to the exit at the bottom center of the board (rows 4-5, columns 2-3) to win.",
+    "controls": "Controls",
+    "controlsMouse": "Mouse/Touch:",
+    "controlsMouseDesc": "Drag blocks to move",
+    "controlsKeyboard": "Keyboard:",
+    "controlsKeyboardTab": "Tab/Shift+Tab: Switch selected block",
+    "controlsKeyboardArrow": "Arrow keys: Move selected block",
+    "controlsKeyboardEnter": "Enter: Select/Deselect",
+    "shortcuts": "Shortcuts",
+    "shortcutUndo": "Undo",
+    "shortcutRedo": "Redo",
+    "shortcutReset": "Reset",
+    "shortcutClose": "Close dialog",
+    "blocks": "Block Types",
+    "blockCaocao": "Cao Cao (2×2)",
+    "blockVertical": "Vertical (2×1)",
+    "blockHorizontal": "Horizontal (1×2)",
+    "blockSoldier": "Soldier (1×1)",
+    "gotIt": "Got it"
+  },
+  "win": {
+    "title": "Congratulations!",
+    "moves": "Moves",
+    "time": "Time",
+    "playAgain": "Play Again",
+    "nextLevel": "Next Level",
+    "backHome": "Back to Home"
+  }
+}
+
