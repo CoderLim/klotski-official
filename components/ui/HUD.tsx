@@ -39,7 +39,7 @@ export default function HUD() {
 
         {/* 顶部：关卡编号和拼图名称 */}
         <div className="text-center mb-1.5">
-          <h1 className="text-lg font-bold text-green-400 mb-0.5">
+          <h1 className="text-2xl font-bold text-green-400 mb-1">
             {t('levelNumber', { level: levelNumber })}
           </h1>
           <p className="text-sm text-gray-400">{currentPuzzle.name}</p>
