@@ -29,6 +29,7 @@
     "mute": "静音",
     "unmute": "开启声音",
     "home": "首页",
+    "levels": "选择关卡",
     "resetConfirm": "确定要重置当前拼图吗？所有进度将被清除。"
   },
   "help": {

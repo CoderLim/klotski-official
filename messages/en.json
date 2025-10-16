@@ -29,6 +29,7 @@
     "mute": "Mute",
     "unmute": "Unmute",
     "home": "Home",
+    "levels": "Levels",
     "resetConfirm": "Are you sure you want to reset the current puzzle? All progress will be lost."
   },
   "help": {

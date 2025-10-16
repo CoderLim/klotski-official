@@ -29,6 +29,7 @@
     "mute": "Silenciar",
     "unmute": "Activar sonido",
     "home": "Inicio",
+    "levels": "Niveles",
     "resetConfirm": "¿Estás seguro de que quieres reiniciar el puzzle actual? Todo el progreso se perderá."
   },
   "help": {

@@ -33,12 +33,11 @@ export default function LanguageSwitcher() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-gray-800/80 hover:bg-gray-700/80 text-white px-4 py-2 rounded-lg border border-gray-600 transition-all shadow-lg"
+        className="flex items-center justify-center bg-gray-800/80 hover:bg-gray-700/80 text-white w-10 h-10 rounded-lg border border-gray-600 transition-all shadow-lg"
         disabled={isPending}
+        aria-label={`Current language: ${currentLanguage?.name}`}
       >
-        <span className="text-xl">{currentLanguage?.flag}</span>
-        <span className="hidden sm:inline">{currentLanguage?.name}</span>
-        <span className="text-xs">▼</span>
+        <span className="text-2xl">{currentLanguage?.flag}</span>
       </button>
 
       {isOpen && (

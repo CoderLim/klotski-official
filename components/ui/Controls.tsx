@@ -82,13 +82,13 @@ export default function Controls() {
               {isMuted ? '🔇' : '🔊'}
             </button>
 
-            {/* 返回首页 */}
+            {/* 选择关卡 */}
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/levels')}
               className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-green-500/50"
-              aria-label={t('home')}
+              aria-label={t('levels')}
             >
-              🏠 {t('home')}
+              🏠 {t('levels')}
             </button>
           </div>
         </div>

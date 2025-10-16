@@ -107,12 +107,12 @@ export default function GamePage({ params }: GamePageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col">
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col overflow-hidden">
       {/* 顶部状态栏 */}
       <HUD />
 
       {/* 游戏棋盘 */}
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center overflow-hidden">
         <Board />
       </div>
 

@@ -80,7 +80,7 @@ export default function WinDialog({
             </button>
           ) : (
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/levels')}
               className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95"
               aria-label={t('backHome')}
             >
