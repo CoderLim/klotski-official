@@ -11,11 +11,8 @@ import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 export default function HomePage() {
   const t = useTranslations();
 
-  // 按困难度排序
-  const difficultyOrder = { easy: 1, medium: 2, hard: 3, expert: 4 };
-  const puzzles = getAllPuzzles().sort((a, b) => {
-    return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-  });
+  // 获取所有拼图（已按困难度排序）
+  const puzzles = getAllPuzzles();
 
   const getDifficultyColor = (difficulty: PuzzleConfig['difficulty']) => {
     switch (difficulty) {
