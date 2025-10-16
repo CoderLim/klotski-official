@@ -10,7 +10,6 @@ import Board from '@/components/game/Board';
 import Controls from '@/components/ui/Controls';
 import WinDialog from '@/components/ui/WinDialog';
 import Confetti from '@/components/ui/Confetti';
-import { playSound, setMuted } from '@/lib/utils/sound';
 
 interface GamePageProps {
   params: Promise<{ slug: string; locale: string }>;
@@ -28,13 +27,11 @@ export default function GamePage({ params }: GamePageProps) {
     moves,
     elapsedTime,
     reset,
-    isMuted,
     undo,
     redo,
   } = useGameStore();
 
   const [showWinDialog, setShowWinDialog] = useState(false);
-  const [hasPlayedWinSound, setHasPlayedWinSound] = useState(false);
 
   // 加载拼图
   useEffect(() => {
@@ -52,19 +49,8 @@ export default function GamePage({ params }: GamePageProps) {
   useEffect(() => {
     if (isWin && !showWinDialog) {
       setShowWinDialog(true);
-      
-      // 播放胜利音效（只播放一次）
-      if (!hasPlayedWinSound && !isMuted) {
-        playSound('win');
-        setHasPlayedWinSound(true);
-      }
     }
-  }, [isWin, showWinDialog, hasPlayedWinSound, isMuted]);
-
-  // 同步静音状态
-  useEffect(() => {
-    setMuted(isMuted);
-  }, [isMuted]);
+  }, [isWin, showWinDialog]);
 
   // 全局快捷键
   useEffect(() => {
@@ -128,7 +114,6 @@ export default function GamePage({ params }: GamePageProps) {
         currentSlug={slug}
         onRestart={() => {
           setShowWinDialog(false);
-          setHasPlayedWinSound(false);
           reset();
         }}
       />

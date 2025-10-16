@@ -19,7 +19,8 @@
   },
   "hud": {
     "moves": "手数",
-    "time": "時間"
+    "time": "時間",
+    "levelNumber": "第{level}ステージ"
   },
   "controls": {
     "undo": "元に戻す",

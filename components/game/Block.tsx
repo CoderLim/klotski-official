@@ -7,7 +7,6 @@ import { useGameStore } from '@/lib/store/useGameStore';
 import { calculateDragPosition, canMoveTo } from '@/lib/engine/movement';
 import { CELL_SIZE, CELL_GAP, gridToPixel } from '@/lib/utils/grid';
 import { getBlockName, isTargetBlock } from '@/lib/utils/colors';
-import { playSound } from '@/lib/utils/sound';
 
 interface BlockProps {
   block: BlockData;
@@ -15,7 +14,7 @@ interface BlockProps {
 }
 
 export default function Block({ block, cellSize = CELL_SIZE }: BlockProps) {
-  const { blocks, moveBlock, selectedBlockId, selectBlock, isMuted } = useGameStore();
+  const { blocks, moveBlock, selectedBlockId, selectBlock } = useGameStore();
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const dragStartPos = useRef<Position>([0, 0]);
@@ -113,20 +112,13 @@ export default function Block({ block, cellSize = CELL_SIZE }: BlockProps) {
 
       if (hasMoved) {
         // 尝试移动到最终位置
-        const success = moveBlock(block.id, finalPosition);
-
-        if (success) {
-          // 播放移动音效
-          if (!isMuted) {
-            playSound('move');
-          }
-        }
+        moveBlock(block.id, finalPosition);
       }
 
       // 重置拖拽偏移
       setDragOffset({ x: 0, y: 0 });
     },
-    [isDragging, block.id, moveBlock, isMuted]
+    [isDragging, block.id, moveBlock]
   );
 
   // 点击选中（用于键盘控制）

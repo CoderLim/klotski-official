@@ -3,11 +3,12 @@
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store/useGameStore';
+import { getPuzzleIndex } from '@/lib/puzzles';
 import { formatTime } from '@/lib/utils/grid';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function HUD() {
-  const t = useTranslations();
+  const t = useTranslations('hud');
   const { currentPuzzle, moves, startTime, elapsedTime, isWin, setElapsedTime } = useGameStore();
 
   // 计时器
@@ -26,9 +27,7 @@ export default function HUD() {
 
   if (!currentPuzzle) return null;
 
-  const getDifficultyLabel = () => {
-    return t(`difficulty.${currentPuzzle.difficulty}`);
-  };
+  const levelNumber = getPuzzleIndex(currentPuzzle.slug);
 
   return (
     <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b-2 border-yellow-500 shadow-lg">
@@ -38,49 +37,31 @@ export default function HUD() {
           <LanguageSwitcher />
         </div>
 
-        {/* 顶部：拼图名称 */}
+        {/* 顶部：关卡编号和拼图名称 */}
         <div className="text-center mb-1.5">
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-base text-gray-300">{currentPuzzle.name}</span>
-            <span
-              className={`px-1.5 py-0.5 rounded text-xs font-semibold ${
-                currentPuzzle.difficulty === 'easy'
-                  ? 'bg-green-600 text-white'
-                  : currentPuzzle.difficulty === 'medium'
-                  ? 'bg-blue-600 text-white'
-                  : currentPuzzle.difficulty === 'hard'
-                  ? 'bg-orange-600 text-white'
-                  : 'bg-red-600 text-white'
-              }`}
-            >
-              {getDifficultyLabel()}
-            </span>
-          </div>
+          <h1 className="text-lg font-bold text-green-400 mb-0.5">
+            {t('levelNumber', { level: levelNumber })}
+          </h1>
+          <p className="text-sm text-gray-400">{currentPuzzle.name}</p>
         </div>
 
         {/* 统计信息 */}
         <div className="flex justify-center gap-3">
           {/* 移动步数 */}
-          <div className="flex items-center gap-1.5 bg-gray-800/50 px-2.5 py-1 rounded-lg border border-gray-700">
-            <span className="text-lg" aria-hidden="true">
+          <div className="flex items-center gap-2 bg-gray-800/50 px-3 py-1.5 rounded-lg border border-gray-700">
+            <span className="text-xl" aria-hidden="true">
               👣
             </span>
-            <div>
-              <div className="text-xs text-gray-400">{t('hud.moves')}</div>
-              <div className="text-base font-bold text-white">{moves}</div>
-            </div>
+            <div className="text-xl font-bold text-white">{moves}</div>
           </div>
 
           {/* 用时 */}
-          <div className="flex items-center gap-1.5 bg-gray-800/50 px-2.5 py-1 rounded-lg border border-gray-700">
-            <span className="text-lg" aria-hidden="true">
+          <div className="flex items-center gap-2 bg-gray-800/50 px-3 py-1.5 rounded-lg border border-gray-700">
+            <span className="text-xl" aria-hidden="true">
               ⏱️
             </span>
-            <div>
-              <div className="text-xs text-gray-400">{t('hud.time')}</div>
-              <div className="text-base font-bold text-white font-mono">
-                {formatTime(elapsedTime)}
-              </div>
+            <div className="text-xl font-bold text-white font-mono">
+              {formatTime(elapsedTime)}
             </div>
           </div>
         </div>

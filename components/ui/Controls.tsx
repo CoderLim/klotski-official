@@ -9,7 +9,7 @@ import HelpDialog from './HelpDialog';
 export default function Controls() {
   const t = useTranslations('controls');
   const router = useRouter();
-  const { canUndo, canRedo, undo, redo, reset, isMuted, toggleMute } = useGameStore();
+  const { canUndo, canRedo, undo, redo, reset } = useGameStore();
   const [showHelp, setShowHelp] = useState(false);
 
   const handleReset = () => {
@@ -70,16 +70,6 @@ export default function Controls() {
               aria-label={t('help')}
             >
               ❓ {t('help')}
-            </button>
-
-            {/* 静音 */}
-            <button
-              onClick={toggleMute}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95"
-              aria-label={isMuted ? t('unmute') : t('mute')}
-              title={isMuted ? t('unmute') : t('mute')}
-            >
-              {isMuted ? '🔇' : '🔊'}
             </button>
 
             {/* 选择关卡 */}

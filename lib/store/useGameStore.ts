@@ -19,9 +19,6 @@ interface GameState {
   history: MoveHistory[];
   historyIndex: number;
   
-  // 设置
-  isMuted: boolean;
-  
   // Actions
   loadPuzzle: (slug: string) => void;
   moveBlock: (blockId: string, newPosition: Position) => boolean;
@@ -30,7 +27,6 @@ interface GameState {
   reset: () => void;
   selectBlock: (blockId: string | null) => void;
   setElapsedTime: (time: number) => void;
-  toggleMute: () => void;
   
   // 辅助方法
   canUndo: () => boolean;
@@ -106,7 +102,6 @@ export const useGameStore = create<GameState>()(
     selectedBlockId: null,
     history: [],
     historyIndex: -1,
-    isMuted: false,
 
     // 加载拼图
     loadPuzzle: (slug: string) => {
@@ -270,13 +265,6 @@ export const useGameStore = create<GameState>()(
     setElapsedTime: (time: number) => {
       set((state) => {
         state.elapsedTime = time;
-      });
-    },
-
-    // 切换静音
-    toggleMute: () => {
-      set((state) => {
-        state.isMuted = !state.isMuted;
       });
     },
 

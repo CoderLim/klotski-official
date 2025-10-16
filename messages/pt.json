@@ -19,7 +19,8 @@
   },
   "hud": {
     "moves": "Movimentos",
-    "time": "Tempo"
+    "time": "Tempo",
+    "levelNumber": "Nível {level}"
   },
   "controls": {
     "undo": "Desfazer",

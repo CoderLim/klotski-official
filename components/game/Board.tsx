@@ -6,10 +6,9 @@ import { tryMoveByKey } from '@/lib/engine/movement';
 import { BOARD_ROWS, BOARD_COLS, CELL_SIZE, CELL_GAP } from '@/lib/utils/grid';
 import { WIN_POSITION } from '@/lib/engine/win';
 import Block from './Block';
-import { playSound } from '@/lib/utils/sound';
 
 export default function Board() {
-  const { blocks, selectedBlockId, selectBlock, moveBlock, isMuted } = useGameStore();
+  const { blocks, selectedBlockId, selectBlock, moveBlock } = useGameStore();
 
   const boardWidth = BOARD_COLS * CELL_SIZE;
   const boardHeight = BOARD_ROWS * CELL_SIZE;
@@ -45,19 +44,14 @@ export default function Board() {
         e.preventDefault();
         const newPosition = tryMoveByKey(selectedBlockId, direction, blocks);
         if (newPosition) {
-          const success = moveBlock(selectedBlockId, newPosition);
-          if (success && !isMuted) {
-            playSound('move');
-          }
-        } else if (!isMuted) {
-          playSound('invalid');
+          moveBlock(selectedBlockId, newPosition);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedBlockId, blocks, moveBlock, selectBlock, isMuted]);
+  }, [selectedBlockId, blocks, moveBlock, selectBlock]);
 
   // 点击空白区域取消选中
   const handleBoardClick = useCallback(() => {
@@ -117,11 +111,6 @@ export default function Board() {
           {blocks.map((block) => (
             <Block key={block.id} block={block} cellSize={CELL_SIZE} />
           ))}
-        </div>
-
-        {/* 棋盘底部说明 */}
-        <div className="mt-4 text-center text-sm text-gray-400">
-          <p>拖拽方块移动 | 点击选中后使用方向键控制</p>
         </div>
       </div>
     </div>

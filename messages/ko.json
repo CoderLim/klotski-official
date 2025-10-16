@@ -19,7 +19,8 @@
   },
   "hud": {
     "moves": "이동",
-    "time": "시간"
+    "time": "시간",
+    "levelNumber": "레벨 {level}"
   },
   "controls": {
     "undo": "실행 취소",

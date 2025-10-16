@@ -19,7 +19,8 @@
   },
   "hud": {
     "moves": "步数",
-    "time": "用时"
+    "time": "用时",
+    "levelNumber": "第 {level} 关"
   },
   "controls": {
     "undo": "撤销",

@@ -19,7 +19,8 @@
   },
   "hud": {
     "moves": "Moves",
-    "time": "Time"
+    "time": "Time",
+    "levelNumber": "Level {level}"
   },
   "controls": {
     "undo": "Undo",

@@ -826,6 +826,15 @@ export function getAllPuzzles(): PuzzleConfig[] {
 export function getPuzzleBySlug(slug: string): PuzzleConfig | null {
   return PUZZLES[slug] || null;
 }
+/**
+ * 根据 slug 获取拼图的关卡编号（从1开始）
+ */
+export function getPuzzleIndex(slug: string): number {
+  const allPuzzles = getAllPuzzles();
+  const index = allPuzzles.findIndex((p) => p.slug === slug);
+  return index >= 0 ? index + 1 : 0;
+}
+
 
 /**
  * 将原始拼图配置转换为运行时方块数据
