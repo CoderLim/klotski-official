@@ -13,6 +13,7 @@ interface WinDialogProps {
   time: number;
   currentSlug: string;
   onRestart: () => void;
+  onNextLevel?: () => void; // 新增：可选的下一关回调
 }
 
 export default function WinDialog({
@@ -22,6 +23,7 @@ export default function WinDialog({
   time,
   currentSlug,
   onRestart,
+  onNextLevel,
 }: WinDialogProps) {
   const t = useTranslations('win');
   const router = useRouter();
@@ -33,8 +35,14 @@ export default function WinDialog({
 
   const handleNextPuzzle = () => {
     if (nextPuzzle) {
-      router.push(`/p/${nextPuzzle.slug}`);
-      onClose();
+      // 如果提供了 onNextLevel 回调，使用它（不改变 URL）
+      if (onNextLevel) {
+        onNextLevel();
+      } else {
+        // 否则使用路由跳转（在 /p/[slug] 页面中使用）
+        router.push(`/p/${nextPuzzle.slug}`);
+        onClose();
+      }
     }
   };
 

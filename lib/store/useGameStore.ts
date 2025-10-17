@@ -117,8 +117,11 @@ export const useGameStore = create<GameState>()(
       set((state) => {
         state.currentPuzzle = puzzle;
         
-        if (savedState) {
-          // 恢复保存的状态
+        // 检查保存的状态是否已经胜利
+        const isSavedStateWin = savedState && savedState.blocks ? checkWin(savedState.blocks) : false;
+        
+        if (savedState && !isSavedStateWin) {
+          // 恢复保存的状态（仅当未胜利时）
           state.blocks = savedState.blocks || initializeBlocks(puzzle);
           state.moves = savedState.moves || 0;
           state.startTime = savedState.startTime || null;
@@ -126,7 +129,11 @@ export const useGameStore = create<GameState>()(
           state.history = savedState.history || [];
           state.historyIndex = savedState.historyIndex ?? -1;
         } else {
-          // 新游戏
+          // 新游戏（或保存的状态已胜利，需要重新开始）
+          if (isSavedStateWin) {
+            // 清除已胜利的保存状态
+            clearGameState(slug);
+          }
           state.blocks = initializeBlocks(puzzle);
           state.moves = 0;
           state.startTime = null;
@@ -135,7 +142,7 @@ export const useGameStore = create<GameState>()(
           state.historyIndex = -1;
         }
         
-        state.isWin = checkWin(state.blocks);
+        state.isWin = false; // 加载时总是设置为未胜利
         state.selectedBlockId = null;
       });
     },
