@@ -63,33 +63,36 @@ export default function Block({ block, cellSize = CELL_SIZE }: BlockProps) {
       // 计算目标网格位置
       const targetPosition = calculateDragPosition(block, { x: deltaX, y: deltaY }, cellSize);
 
-      // 检查目标位置与当前有效位置的距离（防止跳跃穿越）
       const [currentRow, currentCol] = currentValidPos.current;
       const [targetRow, targetCol] = targetPosition;
       const rowDiff = Math.abs(targetRow - currentRow);
       const colDiff = Math.abs(targetCol - currentCol);
-      
-      // 只允许移动到相邻位置（最多相差1格，且只能横向或纵向移动）
-      const isAdjacentMove = (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1) || (rowDiff === 0 && colDiff === 0);
+      const isSamePosition = currentRow === targetRow && currentCol === targetCol;
 
-      // 检查目标位置是否合法（边界内且无碰撞）
-      const isValidMove = isAdjacentMove && canMoveTo(block.id, targetPosition, blocks);
+      // 只允许步进到相邻位置（最多相差1格，且只能横向或纵向移动）
+      const isAdjacentMove = (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
 
-      if (isValidMove) {
-        // 如果目标位置合法且相邻，更新当前有效位置
-        currentValidPos.current = targetPosition;
+      if (!isSamePosition && isAdjacentMove && canMoveTo(block.id, targetPosition, blocks)) {
+        const moved = moveBlock(block.id, targetPosition);
+        if (moved) {
+          currentValidPos.current = targetPosition;
+          dragStartPos.current = targetPosition;
+          pointerStartRef.current = { x: e.clientX, y: e.clientY };
+          setDragOffset({ x: 0, y: 0 });
+          return;
+        }
       }
 
       // 计算应该显示的偏移量（基于当前有效位置）
       const [validRow, validCol] = currentValidPos.current;
       const [startRow, startCol] = dragStartPos.current;
-      
+
       const validOffsetX = (validCol - startCol) * cellSize;
       const validOffsetY = (validRow - startRow) * cellSize;
 
       setDragOffset({ x: validOffsetX, y: validOffsetY });
     },
-    [isDragging, block, blocks, cellSize]
+    [isDragging, block, blocks, cellSize, moveBlock]
   );
 
   // 结束拖拽
@@ -179,4 +182,3 @@ export default function Block({ block, cellSize = CELL_SIZE }: BlockProps) {
     </motion.div>
   );
 }
-
