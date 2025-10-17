@@ -9,6 +9,7 @@ import Board from '@/components/game/Board';
 import Controls from '@/components/ui/Controls';
 import WinDialog from '@/components/ui/WinDialog';
 import Confetti from '@/components/ui/Confetti';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 export default function HomePage() {
   const t = useTranslations('controls');
@@ -24,6 +25,7 @@ export default function HomePage() {
   } = useGameStore();
 
   const [showWinDialog, setShowWinDialog] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // 加载第一个拼图
   useEffect(() => {
@@ -57,9 +59,7 @@ export default function HomePage() {
         case 'r':
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault();
-            if (confirm(t('resetConfirm'))) {
-              reset();
-            }
+            setShowResetConfirm(true);
           } else {
             e.preventDefault();
             redo();
@@ -70,7 +70,7 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleGlobalKeys);
     return () => window.removeEventListener('keydown', handleGlobalKeys);
-  }, [undo, redo, reset, t]);
+  }, [undo, redo, t]);
 
   // 处理下一关
   const handleNextLevel = () => {
@@ -121,6 +121,17 @@ export default function HomePage() {
 
       {/* 胜利特效 */}
       <Confetti show={isWin} />
+
+      {/* 重置确认对话框（快捷键触发）*/}
+      <ConfirmDialog
+        isOpen={showResetConfirm}
+        onClose={() => setShowResetConfirm(false)}
+        onConfirm={reset}
+        title={t('reset')}
+        message={t('resetConfirm')}
+        confirmText={t('reset')}
+        cancelText={t('cancel')}
+      />
     </div>
   );
 }

@@ -4,16 +4,16 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store/useGameStore';
 import HelpDialog from './HelpDialog';
+import ConfirmDialog from './ConfirmDialog';
 
 export default function Controls() {
   const t = useTranslations('controls');
   const { canUndo, canRedo, undo, redo, reset } = useGameStore();
   const [showHelp, setShowHelp] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleReset = () => {
-    if (confirm(t('resetConfirm'))) {
-      reset();
-    }
+    reset();
   };
 
   return (
@@ -53,7 +53,7 @@ export default function Controls() {
 
             {/* 重置 */}
             <button
-              onClick={handleReset}
+              onClick={() => setShowResetConfirm(true)}
               className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-orange-500/50"
               aria-label={t('reset')}
               title={`${t('reset')} (Ctrl+R)`}
@@ -75,6 +75,17 @@ export default function Controls() {
 
       {/* 帮助对话框 */}
       <HelpDialog isOpen={showHelp} onClose={() => setShowHelp(false)} />
+
+      {/* 重置确认对话框 */}
+      <ConfirmDialog
+        isOpen={showResetConfirm}
+        onClose={() => setShowResetConfirm(false)}
+        onConfirm={handleReset}
+        title={t('reset')}
+        message={t('resetConfirm')}
+        confirmText={t('reset')}
+        cancelText={t('cancel')}
+      />
     </>
   );
 }

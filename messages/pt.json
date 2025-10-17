@@ -31,7 +31,8 @@
     "unmute": "Ativar som",
     "home": "Início",
     "levels": "Níveis",
-    "resetConfirm": "Tem certeza de que deseja reiniciar o puzzle atual? Todo o progresso será perdido."
+    "resetConfirm": "Tem certeza de que deseja reiniciar o puzzle atual? Todo o progresso será perdido.",
+    "cancel": "Cancelar"
   },
   "help": {
     "title": "Ajuda do Jogo",
