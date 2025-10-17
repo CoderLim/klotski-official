@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
 import Modal from './Modal';
 import { formatTime } from '@/lib/utils/grid';
 import { getAllPuzzles } from '@/lib/puzzles';
@@ -13,7 +12,7 @@ interface WinDialogProps {
   time: number;
   currentSlug: string;
   onRestart: () => void;
-  onNextLevel?: () => void; // 新增：可选的下一关回调
+  onNextLevel?: () => void;
 }
 
 export default function WinDialog({
@@ -26,7 +25,6 @@ export default function WinDialog({
   onNextLevel,
 }: WinDialogProps) {
   const t = useTranslations('win');
-  const router = useRouter();
 
   // 查找下一个拼图
   const allPuzzles = getAllPuzzles();
@@ -34,15 +32,8 @@ export default function WinDialog({
   const nextPuzzle = currentIndex < allPuzzles.length - 1 ? allPuzzles[currentIndex + 1] : null;
 
   const handleNextPuzzle = () => {
-    if (nextPuzzle) {
-      // 如果提供了 onNextLevel 回调，使用它（不改变 URL）
-      if (onNextLevel) {
-        onNextLevel();
-      } else {
-        // 否则使用路由跳转（在 /p/[slug] 页面中使用）
-        router.push(`/p/${nextPuzzle.slug}`);
-        onClose();
-      }
+    if (nextPuzzle && onNextLevel) {
+      onNextLevel();
     }
   };
 
@@ -78,21 +69,13 @@ export default function WinDialog({
           >
             {t('playAgain')}
           </button>
-          {nextPuzzle ? (
+          {nextPuzzle && (
             <button
               onClick={handleNextPuzzle}
               className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95"
               aria-label={t('nextLevel')}
             >
               {t('nextLevel')} →
-            </button>
-          ) : (
-            <button
-              onClick={() => router.push('/levels')}
-              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95"
-              aria-label={t('backHome')}
-            >
-              {t('backHome')}
             </button>
           )}
         </div>

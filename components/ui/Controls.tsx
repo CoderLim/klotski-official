@@ -2,13 +2,11 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
 import { useGameStore } from '@/lib/store/useGameStore';
 import HelpDialog from './HelpDialog';
 
 export default function Controls() {
   const t = useTranslations('controls');
-  const router = useRouter();
   const { canUndo, canRedo, undo, redo, reset } = useGameStore();
   const [showHelp, setShowHelp] = useState(false);
 
@@ -70,15 +68,6 @@ export default function Controls() {
               aria-label={t('help')}
             >
               ❓ {t('help')}
-            </button>
-
-            {/* 选择关卡 */}
-            <button
-              onClick={() => router.push('/levels')}
-              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-green-500/50"
-              aria-label={t('levels')}
-            >
-              🏠 {t('levels')}
             </button>
           </div>
         </div>

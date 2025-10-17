@@ -1,8 +1,7 @@
 'use client';
 
-import { useLocale } from 'next-intl';
-import { useRouter, usePathname } from '@/i18n/routing';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
+import { useLocaleContext } from '@/lib/i18n/I18nProvider';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
@@ -14,19 +13,14 @@ const languages = [
 ];
 
 export default function LanguageSwitcher() {
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isPending, startTransition] = useTransition();
+  const { locale, setLocale } = useLocaleContext();
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLanguage = languages.find((lang) => lang.code === locale);
 
-  const handleLanguageChange = (newLocale: string) => {
-    startTransition(() => {
-      router.replace(pathname, { locale: newLocale });
-      setIsOpen(false);
-    });
+  const handleLanguageChange = (newLocale: 'en' | 'zh' | 'ja' | 'es' | 'pt' | 'ko') => {
+    setLocale(newLocale);
+    setIsOpen(false);
   };
 
   return (
@@ -34,7 +28,6 @@ export default function LanguageSwitcher() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-center bg-gray-800/80 hover:bg-gray-700/80 text-white w-10 h-10 rounded-lg border border-gray-600 transition-all shadow-lg"
-        disabled={isPending}
         aria-label={`Current language: ${currentLanguage?.name}`}
       >
         <span className="text-2xl">{currentLanguage?.flag}</span>
@@ -53,11 +46,10 @@ export default function LanguageSwitcher() {
             {languages.map((lang) => (
               <button
                 key={lang.code}
-                onClick={() => handleLanguageChange(lang.code)}
+                onClick={() => handleLanguageChange(lang.code as any)}
                 className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left ${
                   locale === lang.code ? 'bg-gray-700 text-yellow-400' : 'text-white'
                 }`}
-                disabled={isPending}
               >
                 <span className="text-xl">{lang.flag}</span>
                 <span className="flex-1">{lang.name}</span>

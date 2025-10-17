@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { I18nProvider } from '@/lib/i18n/I18nProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -12,5 +13,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return (
+    <html lang="zh">
+      <body className="antialiased">
+        <I18nProvider>{children}</I18nProvider>
+      </body>
+    </html>
+  );
 }
