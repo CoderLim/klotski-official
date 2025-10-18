@@ -9,12 +9,13 @@
 - ✅ 图片优化已禁用（`unoptimized: true`）
 - ✅ 项目可以打包为纯静态 HTML5 应用
 
-### 2. CrazyGames SDK 集成
-- ✅ SDK 脚本已添加到 `app/layout.tsx`
-- ✅ SDK 工具类 `lib/utils/crazygames.ts` 已创建
+### 2. CrazyGames SDK v3 集成
+- ✅ SDK v3 脚本已添加到 `app/layout.tsx`
+- ✅ SDK 工具类 `lib/utils/crazygames.ts` 已创建（v3 版本）
 - ✅ 关键事件已集成：
+  - `init()` - **v3 必需**：手动初始化 SDK
+  - `loadingStart/Stop()` - **v3 新方法**：游戏加载状态
   - `gameplayStart()` - 游戏开始时触发
-  - `gameLoadingStop()` - 资源加载完成时触发
   - `happytime()` - 玩家通关时触发
 
 ### 3. 技术要求检查
@@ -139,14 +140,20 @@ pnpm build:static
 - [ ] 添加每日挑战
 - [ ] 集成 CrazyGames 用户系统
 
-## 📊 SDK 集成详情
+## 📊 SDK v3 集成详情
 
 ### 已实现的 SDK 功能
 
-#### 1. 基础事件
+#### 1. SDK 初始化（v3 必需）
 ```typescript
-// 游戏加载完成
-crazyGamesSDK.gameLoadingStop();
+// ✨ v3 新增：必须先初始化
+await crazyGamesSDK.init();
+```
+
+#### 2. 基础事件
+```typescript
+// ✨ v3 新方法名：游戏加载完成
+crazyGamesSDK.gameLoadingStop();  // 内部调用 loadingStop()
 
 // 游戏开始
 crazyGamesSDK.gameplayStart();
@@ -158,7 +165,17 @@ crazyGamesSDK.gameplayStop();
 crazyGamesSDK.happytime();
 ```
 
-#### 2. 广告支持（已预留接口）
+#### 3. 环境检测（v3 新增）
+```typescript
+// 获取当前环境
+crazyGamesSDK.getEnvironment();
+// 返回: 'crazygames' | 'local' | 'disabled' | 'unknown'
+
+// 检查是否已初始化
+crazyGamesSDK.isInitialized();
+```
+
+#### 4. 广告支持（已预留接口）
 ```typescript
 // 中插广告
 await crazyGamesSDK.requestMidgameAd();
@@ -168,9 +185,13 @@ await crazyGamesSDK.requestRewardedAd();
 ```
 
 ### SDK 文件位置
-- SDK 集成代码: `lib/utils/crazygames.ts`
+- SDK 集成代码: `lib/utils/crazygames.ts` (v3 版本)
 - SDK 初始化: `app/page.tsx`（第 32-40 行）
 - SDK 脚本引入: `app/layout.tsx`（第 20 行）
+
+### v3 SDK 文档
+- 官方文档: https://docs.crazygames.com/sdk/intro/#html5
+- v2 到 v3 迁移指南: 见 `CRAZYGAMES_SDK_FIX.md`
 
 ## 🐛 故障排除
 
@@ -180,15 +201,22 @@ await crazyGamesSDK.requestRewardedAd();
 - 确保所有资源路径正确
 - 验证 `index.html` 在 ZIP 根目录
 
-### 问题：SDK 事件未触发或报错 "sdkNotInitialized"
+### 问题：SDK 事件未触发或报错
 **解决方案**：
-- ✅ **已修复**：SDK 现在会自动检测平台和初始化状态
+- ✅ **v3 SDK 已完整集成**：包含手动初始化和正确的方法名
 - 在本地开发环境（localhost），SDK 会自动禁用，不会报错
 - 所有 SDK 调用都有错误保护，不会影响游戏运行
 - 查看控制台日志：
   - `Not on CrazyGames platform, SDK disabled (local development)` - 正常
   - `Happytime skipped (SDK not initialized...)` - 正常，本地开发
-  - `✅ CrazyGames SDK initialized successfully` - 在 CrazyGames 平台成功初始化
+  - `✅ CrazyGames SDK v3 initialized successfully` - 在 CrazyGames 平台成功初始化
+  - `Environment: crazygames` - v3 环境检测信息
+
+### 问题：v2 方法不工作
+**解决方案**：
+- ✅ **已升级到 v3**：使用新的方法名（`loadingStart/Stop`）
+- 对外接口保持兼容（`gameLoadingStop` 等方法名不变）
+- 详见 `CRAZYGAMES_SDK_FIX.md` 了解 v2 到 v3 的变更
 
 ### 问题：音频无法播放
 **解决方案**：
@@ -205,9 +233,15 @@ await crazyGamesSDK.requestRewardedAd();
 ## 📞 支持资源
 
 - [CrazyGames 开发者文档](https://docs.crazygames.com/)
-- [SDK 文档](https://docs.crazygames.com/sdk/html5/)
+- [SDK v3 文档（HTML5）](https://docs.crazygames.com/sdk/intro/#html5)
+- [SDK v3 视频广告](https://docs.crazygames.com/sdk/video-ads/)
+- [SDK v3 游戏事件](https://docs.crazygames.com/sdk/game/)
 - [技术要求](https://docs.crazygames.com/requirements/technical/)
 - [质量要求](https://docs.crazygames.com/requirements/quality/)
+
+### 本项目相关文档
+- `CRAZYGAMES_SDK_FIX.md` - v3 SDK 集成说明和技术细节
+- `CRAZYGAMES_DEPLOY.md` - 本文档，部署指南
 
 ## ✨ 下一步
 

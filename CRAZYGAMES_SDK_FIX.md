@@ -1,47 +1,93 @@
-# CrazyGames SDK 错误修复说明
+# CrazyGames SDK v3 集成说明
 
-## 🐛 问题描述
+## 📦 SDK 版本
 
-之前在完成关卡后会出现以下错误：
+**当前版本**: v3  
+**文档**: https://docs.crazygames.com/sdk/intro/#html5
 
+## 🎯 v2 到 v3 的重要变更
+
+### 1. SDK 需要手动初始化
+v3 SDK 必须在使用前调用初始化方法：
+
+```typescript
+await window.CrazyGames.SDK.init();
 ```
-t.GeneralError
-code: "sdkNotInitialized"
-message: "CrazySDK is not initialized yet. Check docs.crazygames.com for more info."
+
+### 2. 方法名称变更
+| v2 方法名 | v3 方法名 | 说明 |
+|----------|----------|------|
+| `sdkGameLoadingStart()` | `loadingStart()` | 游戏加载开始 |
+| `sdkGameLoadingStop()` | `loadingStop()` | 游戏加载完成 |
+| `gameplayStart()` | `gameplayStart()` | 游戏开始（不变） |
+| `gameplayStop()` | `gameplayStop()` | 游戏暂停（不变） |
+| `happytime()` | `happytime()` | 快乐时刻（不变） |
+
+### 3. 新增 environment 属性
+```typescript
+window.CrazyGames.SDK.environment
+// 返回: 'crazygames' | 'local' | 'disabled'
 ```
 
-## ✅ 修复内容
+## ✅ 当前集成状态
 
-### 1. 增强的平台检测
+### 1. SDK 脚本加载
+**文件**: `app/layout.tsx`
 
+```tsx
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+```
+
+### 2. SDK 初始化（v3 版本）
 **文件**: `lib/utils/crazygames.ts`
 
 ```typescript
-isOnCrazyGames(): boolean {
-  // 本地开发环境自动返回 false
-  if (typeof window === 'undefined') return false;
+async init(): Promise<boolean> {
+  // 等待 SDK 脚本加载
+  await this.waitForSDK();
   
-  const hostname = window.location.hostname;
-  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.')) {
-    return false;
+  // ✨ v3 新增：调用官方 init 方法
+  if (window.CrazyGames?.SDK?.init) {
+    await window.CrazyGames.SDK.init();
+    this.sdk = window.CrazyGames.SDK;
+    this.initialized = true;
+    console.log('✅ CrazyGames SDK v3 initialized successfully');
+    console.log('Environment:', this.sdk.environment);
+    return true;
   }
-  
-  // 只在实际 CrazyGames 平台上返回 true
-  const referrer = document.referrer.toLowerCase();
-  const isCrazyGames = referrer.includes('crazygames.com') || 
-                       referrer.includes('crazygames.') ||
-                       hostname.includes('crazygames') ||
-                       !!window.CrazyGames;
-  
-  return isCrazyGames;
 }
 ```
 
-### 2. 所有 SDK 方法增加安全检查
+### 3. 方法调用（使用 v3 API）
+**文件**: `lib/utils/crazygames.ts`
 
-所有 SDK 调用（`gameplayStart()`, `happytime()`, `gameplayStop()` 等）现在都会：
+```typescript
+// ✨ 使用 v3 新方法名
+gameLoadingStop(): void {
+  if (this.sdk?.game?.loadingStop) {
+    this.sdk.game.loadingStop();  // v3: loadingStop
+  }
+}
 
-1. **检查初始化状态**
+// 其他方法保持不变
+gameplayStart(): void {
+  if (this.sdk?.game?.gameplayStart) {
+    this.sdk.game.gameplayStart();
+  }
+}
+
+happytime(): void {
+  if (this.sdk?.game?.happytime) {
+    this.sdk.game.happytime();
+  }
+}
+```
+
+### 4. 安全检查机制
+
+所有 SDK 方法都包含以下保护：
+
+1. **平台检测**
    ```typescript
    if (!this.initialized || !this.isOnCrazyGames()) {
      return; // 安全退出，不报错
@@ -59,10 +105,10 @@ isOnCrazyGames(): boolean {
    }
    ```
 
-3. **详细日志**
-   - ✅ 本地开发：`Not on CrazyGames platform, SDK disabled (local development)`
-   - ✅ 通关时（本地）：`Happytime skipped (SDK not initialized or not on platform)`
-   - ✅ CrazyGames 平台：`✅ CrazyGames SDK initialized successfully`
+3. **智能环境检测**
+   - 本地开发环境（localhost/127.0.0.1）→ 自动禁用
+   - CrazyGames 平台 → 正常初始化和运行
+   - 其他域名 → 禁用（除非从 CrazyGames 嵌入）
 
 ## 🧪 测试步骤
 
@@ -81,9 +127,9 @@ isOnCrazyGames(): boolean {
    ```
 
 4. **完成一关**
-   - 应该不会报任何 SDK 错误
-   - 控制台会显示：`Happytime skipped (SDK not initialized or not on platform)`
-   - 游戏正常运行
+   - ✅ 不会报任何 SDK 错误
+   - ✅ 控制台会显示：`Happytime skipped (SDK not initialized or not on platform)`
+   - ✅ 游戏正常运行
 
 ### 生产环境测试（CrazyGames 平台）
 
@@ -92,39 +138,61 @@ isOnCrazyGames(): boolean {
    pnpm build:static
    ```
 
-2. **上传到 CrazyGames**
+2. **上传到 CrazyGames Preview Tool**
 
-3. **在 CrazyGames 测试环境**
-   - 打开浏览器控制台
-   - 预期看到：`✅ CrazyGames SDK initialized successfully`
-   - 完成关卡时应触发 `happytime` 事件
-   - 无任何错误
+3. **在 CrazyGames 测试环境打开控制台**
+   
+   **预期日志流程**：
+   ```
+   Initializing CrazyGames SDK v3...
+   ✅ CrazyGames SDK v3 initialized successfully
+   Environment: crazygames (或 local)
+   CrazyGames: Loading stopped
+   CrazyGames: Gameplay started
+   ```
 
-## 📊 修复前后对比
+4. **完成一关后**
+   ```
+   CrazyGames: Happytime triggered
+   ```
 
-| 场景 | 修复前 | 修复后 |
+5. **验证**
+   - ✅ SDK 成功初始化
+   - ✅ 游戏加载事件正常触发
+   - ✅ 通关事件正常触发
+   - ✅ 无任何错误
+
+## 📊 v2 vs v3 对比
+
+| 项目 | v2 SDK | v3 SDK |
 |------|--------|--------|
-| 本地开发 | ❌ SDK 未初始化错误 | ✅ 自动检测，静默跳过 |
-| 完成关卡（本地） | ❌ `sdkNotInitialized` 错误 | ✅ 安全跳过，有日志说明 |
-| CrazyGames 平台 | ⚠️ 可能初始化失败 | ✅ 正确初始化和触发事件 |
-| 错误处理 | ❌ 抛出异常 | ✅ Try-Catch 保护，仅警告 |
+| 初始化 | 自动初始化 | ✨ 需要手动调用 `init()` |
+| 加载方法 | `sdkGameLoadingStart/Stop()` | ✨ `loadingStart/Stop()` |
+| 环境检测 | 无内置方法 | ✨ `SDK.environment` 属性 |
+| 本地开发 | 可能报错 | ✅ 自动识别，安全跳过 |
+| 错误处理 | 不一致（字符串或对象） | ✅ 统一格式 `{code, message}` |
 
 ## 🎯 关键改进
 
-### 1. 智能环境检测
-- ✅ 自动识别本地开发环境
+### 1. 符合 v3 SDK 规范
+- ✅ 调用官方 `window.CrazyGames.SDK.init()` 方法
+- ✅ 使用新的方法名（`loadingStart/Stop`）
+- ✅ 利用 `environment` 属性进行环境检测
+
+### 2. 智能环境检测
+- ✅ 自动识别本地开发环境（localhost/127.0.0.1/内网 IP）
 - ✅ 自动识别 CrazyGames 平台
 - ✅ 避免不必要的初始化尝试
 
-### 2. 防御性编程
+### 3. 防御性编程
 - ✅ 所有方法都检查初始化状态
-- ✅ 所有 SDK 调用都有 Try-Catch
+- ✅ 所有 SDK 调用都有 Try-Catch 保护
 - ✅ 不影响游戏主体功能
 
-### 3. 开发者友好
+### 4. 开发者友好
 - ✅ 清晰的控制台日志
 - ✅ 区分正常跳过和真实错误
-- ✅ 不会干扰本地开发
+- ✅ 本地开发不会干扰游戏运行
 
 ## 📝 受影响的文件
 
@@ -157,20 +225,42 @@ CRAZYGAMES_DEPLOY.md         ← 更新故障排除部分
 
 ## 💡 技术细节
 
-### SDK 初始化流程
+### SDK 初始化流程（v3）
 
 ```typescript
 // app/page.tsx 中的初始化
 useEffect(() => {
   crazyGamesSDK.init().then((success) => {
     if (success) {
-      // 只在 CrazyGames 平台执行
-      crazyGamesSDK.gameLoadingStop();
+      // ✨ v3: 只在 CrazyGames 平台执行
+      crazyGamesSDK.gameLoadingStop();  // 内部调用 loadingStop()
       crazyGamesSDK.gameplayStart();
     }
     // 本地环境 success = false，安全跳过
   });
 }, []);
+```
+
+### SDK 初始化内部流程
+
+```typescript
+// lib/utils/crazygames.ts
+async init() {
+  // 1. 检测平台
+  if (!this.isOnCrazyGames()) {
+    return false;
+  }
+  
+  // 2. 等待 SDK 脚本加载
+  await this.waitForSDK();
+  
+  // 3. ✨ v3 关键：调用官方 init 方法
+  await window.CrazyGames.SDK.init();
+  
+  // 4. 保存 SDK 实例
+  this.sdk = window.CrazyGames.SDK;
+  this.initialized = true;
+}
 ```
 
 ### 通关事件触发
@@ -186,14 +276,27 @@ useEffect(() => {
 }, [isWin, showWinDialog]);
 ```
 
+## 🆕 新增方法
+
+```typescript
+// 获取 SDK 环境
+crazyGamesSDK.getEnvironment();
+// 返回: 'crazygames' | 'local' | 'disabled' | 'unknown'
+
+// 检查是否已初始化
+crazyGamesSDK.isInitialized();
+// 返回: boolean
+```
+
 ## ✨ 总结
 
-这个修复确保了：
-- ✅ 本地开发时不会报 SDK 错误
-- ✅ CrazyGames 平台上正确工作
-- ✅ 游戏在任何环境都能正常运行
-- ✅ 开发者体验更好（清晰的日志）
-- ✅ 生产环境更稳定（错误保护）
+本次更新确保了：
+- ✅ **符合 v3 规范**：调用官方 init 方法，使用新的 API
+- ✅ **向后兼容**：对外接口保持不变（`gameLoadingStop` 等）
+- ✅ **本地开发友好**：不会报 SDK 错误
+- ✅ **CrazyGames 平台正确工作**：完整支持所有功能
+- ✅ **稳定可靠**：多层错误保护，不影响游戏运行
+- ✅ **易于调试**：清晰的日志和环境检测
 
-现在可以放心地在本地开发和测试，不会再看到 `sdkNotInitialized` 错误！🎉
+现在您可以安全地部署到 CrazyGames 平台了！🎉
 
