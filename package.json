@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "build:static": "next build && node scripts/fix-asset-paths.js",
     "start": "next start",
+    "preview": "npx serve@latest out",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"

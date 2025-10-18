@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { getAllPuzzles } from '@/lib/puzzles';
+import { crazyGamesSDK } from '@/lib/utils/crazygames';
 import HUD from '@/components/ui/HUD';
 import Board from '@/components/game/Board';
 import Controls from '@/components/ui/Controls';
@@ -27,6 +28,17 @@ export default function HomePage() {
   const [showWinDialog, setShowWinDialog] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
+  // 初始化 CrazyGames SDK
+  useEffect(() => {
+    crazyGamesSDK.init().then((success) => {
+      if (success) {
+        // SDK 初始化成功，通知游戏加载完成
+        crazyGamesSDK.gameLoadingStop();
+        crazyGamesSDK.gameplayStart();
+      }
+    });
+  }, []);
+
   // 加载第一个拼图
   useEffect(() => {
     const allPuzzles = getAllPuzzles();
@@ -39,6 +51,8 @@ export default function HomePage() {
   useEffect(() => {
     if (isWin && !showWinDialog) {
       setShowWinDialog(true);
+      // 通知 CrazyGames 玩家达成快乐时刻
+      crazyGamesSDK.happytime();
     }
   }, [isWin, showWinDialog]);
 

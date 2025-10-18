@@ -15,6 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh">
+      <head>
+        {/* CrazyGames SDK */}
+        <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+      </head>
       <body className="antialiased">
         <I18nProvider>{children}</I18nProvider>
       </body>
