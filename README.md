@@ -9,7 +9,7 @@
 
 一个完整、现代化的华容道拼图游戏，使用 Next.js 14 + TypeScript 开发
 
-[在线演示](#) | [快速开始](#快速开始) | [游戏规则](#游戏规则)
+[在线演示](https://klotski-official.vercel.app/) | [快速开始](https://klotski-official.vercel.app/) | [游戏规则](#游戏规则)
 
 </div>
 
