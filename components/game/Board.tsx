@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { tryMoveByKey } from '@/lib/engine/movement';
 import { BOARD_ROWS, BOARD_COLS, CELL_SIZE, CELL_GAP } from '@/lib/utils/grid';
@@ -9,9 +9,64 @@ import Block from './Block';
 
 export default function Board() {
   const { blocks, selectedBlockId, selectBlock, moveBlock } = useGameStore();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [cellSize, setCellSize] = useState(CELL_SIZE);
 
-  const boardWidth = BOARD_COLS * CELL_SIZE;
-  const boardHeight = BOARD_ROWS * CELL_SIZE;
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const updateCellSize = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const styles = window.getComputedStyle(container);
+      const paddingX =
+        parseFloat(styles.paddingLeft || '0') + parseFloat(styles.paddingRight || '0');
+      const paddingY =
+        parseFloat(styles.paddingTop || '0') + parseFloat(styles.paddingBottom || '0');
+
+      const availableWidth = container.clientWidth - paddingX;
+      const availableHeight = container.clientHeight - paddingY;
+
+      if (availableWidth <= 0 || availableHeight <= 0) {
+        return;
+      }
+
+      const nextCellSize = Math.floor(
+        Math.min(availableWidth / BOARD_COLS, availableHeight / BOARD_ROWS)
+      );
+
+      if (!Number.isFinite(nextCellSize) || nextCellSize <= 0) {
+        return;
+      }
+
+      setCellSize((prev) => (prev === nextCellSize ? prev : nextCellSize));
+    };
+
+    updateCellSize();
+
+    const observer =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => updateCellSize())
+        : null;
+
+    if (observer && containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    window.addEventListener('resize', updateCellSize);
+
+    return () => {
+      if (observer && containerRef.current) {
+        observer.unobserve(containerRef.current);
+        observer.disconnect();
+      }
+      window.removeEventListener('resize', updateCellSize);
+    };
+  }, []);
+
+  const boardWidth = BOARD_COLS * cellSize;
+  const boardHeight = BOARD_ROWS * cellSize;
 
   // 键盘控制
   useEffect(() => {
@@ -59,7 +114,7 @@ export default function Board() {
   }, [selectBlock]);
 
   return (
-    <div className="flex justify-center items-center p-4">
+    <div ref={containerRef} className="flex justify-center items-center p-4 w-full h-full">
       <div className="relative">
         {/* 棋盘容器 */}
         <div
@@ -81,10 +136,10 @@ export default function Board() {
                   key={`grid-${row}-${col}`}
                   style={{
                     position: 'absolute',
-                    left: col * CELL_SIZE,
-                    top: row * CELL_SIZE,
-                    width: CELL_SIZE - CELL_GAP,
-                    height: CELL_SIZE - CELL_GAP,
+                    left: col * cellSize,
+                    top: row * cellSize,
+                    width: cellSize - CELL_GAP,
+                    height: cellSize - CELL_GAP,
                   }}
                   className="border border-amber-300/40 rounded"
                 />
@@ -96,10 +151,10 @@ export default function Board() {
           <div
             style={{
               position: 'absolute',
-              left: WIN_POSITION[1] * CELL_SIZE,
-              top: WIN_POSITION[0] * CELL_SIZE,
-              width: 2 * CELL_SIZE - CELL_GAP,
-              height: 2 * CELL_SIZE - CELL_GAP,
+              left: WIN_POSITION[1] * cellSize,
+              top: WIN_POSITION[0] * cellSize,
+              width: 2 * cellSize - CELL_GAP,
+              height: 2 * cellSize - CELL_GAP,
             }}
             className="border-4 border-dashed border-red-400/50 rounded-lg bg-red-100/20 pointer-events-none flex items-center justify-center"
             aria-label="目标出口"
@@ -109,11 +164,10 @@ export default function Board() {
 
           {/* 方块 */}
           {blocks.map((block) => (
-            <Block key={block.id} block={block} cellSize={CELL_SIZE} />
+            <Block key={block.id} block={block} cellSize={cellSize} />
           ))}
         </div>
       </div>
     </div>
   );
 }
-

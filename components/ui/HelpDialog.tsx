@@ -63,29 +63,6 @@ export default function HelpDialog({ isOpen, onClose }: HelpDialogProps) {
           </div>
         </section>
 
-        {/* 方块说明 */}
-        <section>
-          <h3 className="text-lg font-semibold text-yellow-400 mb-2">🧩 {t('blocks')}</h3>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-red-500 rounded border-2 border-red-600"></div>
-              <span>{t('blockCaocao')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-8 bg-amber-500 rounded border-2 border-amber-600"></div>
-              <span>{t('blockVertical')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-4 bg-blue-500 rounded border-2 border-blue-600"></div>
-              <span>{t('blockHorizontal')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-emerald-500 rounded border-2 border-emerald-600"></div>
-              <span>{t('blockSoldier')}</span>
-            </div>
-          </div>
-        </section>
-
         {/* 关闭按钮 */}
         <button
           onClick={onClose}

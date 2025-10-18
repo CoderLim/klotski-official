@@ -107,17 +107,20 @@ export default function HomePage() {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col overflow-hidden">
-      {/* 顶部状态栏 */}
-      <HUD />
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex overflow-hidden">
+      {/* 左侧：游戏区域（棋盘 + 控制按钮）- 占 3/4 */}
+      <div className="flex-[3] flex flex-col overflow-hidden">
+        {/* 游戏棋盘 */}
+        <div className="flex-1 flex items-center justify-center overflow-hidden">
+          <Board />
+        </div>
 
-      {/* 游戏棋盘 */}
-      <div className="flex-1 flex items-center justify-center overflow-hidden">
-        <Board />
+        {/* 控制按钮 */}
+        <Controls />
       </div>
 
-      {/* 控制按钮 */}
-      <Controls />
+      {/* 右侧：状态栏 - 占 1/4 */}
+      <HUD />
 
       {/* 胜利对话框 */}
       <WinDialog
