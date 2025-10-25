@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useGameStore } from '@/lib/store/useGameStore';
 import HelpDialog from './HelpDialog';
 import ConfirmDialog from './ConfirmDialog';
@@ -69,6 +70,16 @@ export default function Controls() {
             >
               ❓ {t('help')}
             </button>
+
+            {/* AI 求解器 */}
+            <Link
+              href="/solver"
+              className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-cyan-500/50"
+              aria-label="AI 求解器"
+              title="AI 求解器"
+            >
+              🤖 AI 求解器
+            </Link>
           </div>
         </div>
       </div>
