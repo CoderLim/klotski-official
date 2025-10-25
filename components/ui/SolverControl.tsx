@@ -32,8 +32,8 @@ export function SolverControl() {
 
       setResult(solverResult);
     } catch (error) {
-      console.error('求解失败:', error);
-      alert('求解失败，请稍后重试');
+      console.error('Solving failed:', error);
+      alert('Solving failed, please try again later');
     } finally {
       setSolving(false);
     }
@@ -43,7 +43,7 @@ export function SolverControl() {
     if (!result || !result.success) return;
 
     if (isPaused) {
-      // 恢复播放
+      // Resume playback
       setIsPaused(false);
       pauseRef.current = false;
       return;
@@ -56,7 +56,7 @@ export function SolverControl() {
     currentStepRef.current = 0;
     setCurrentStep(0);
 
-    // 使用递归函数来实现真正的暂停
+    // Use recursive function to implement true pause
     const playNextMove = async (stepIndex: number) => {
       if (stopRef.current || stepIndex >= result.moves.length) {
         setAutoPlaying(false);
@@ -66,7 +66,7 @@ export function SolverControl() {
         return;
       }
 
-      // 如果被暂停，等待恢复
+      // If paused, wait for resume
       if (pauseRef.current) {
         const checkPause = () => {
           return new Promise<void>((resolve) => {
@@ -105,7 +105,7 @@ export function SolverControl() {
       
       moveBlock(move.blockId, move.to);
       
-      // 递归调用下一个移动
+      // Recursively call next move
       playNextMove(stepIndex + 1);
     };
 
@@ -131,9 +131,9 @@ export function SolverControl() {
     moveBlock(move.blockId, move.to);
     setCurrentStep(currentStep + 1);
     
-    // 如果当前在自动播放中，单步后继续自动播放
+    // If currently auto-playing, continue auto-play after single step
     if (autoPlaying && !isPaused) {
-      // 继续自动播放逻辑
+      // Continue auto-play logic
       const continueAutoPlay = async () => {
         if (currentStep + 1 >= result.moves.length) {
           setAutoPlaying(false);
@@ -143,7 +143,7 @@ export function SolverControl() {
           return;
         }
         
-        // 继续播放剩余步骤
+        // Continue playing remaining steps
         for (let i = currentStep + 1; i < result.moves.length; i++) {
           if (stopRef.current || pauseRef.current) {
             break;
@@ -194,7 +194,7 @@ export function SolverControl() {
         </div>
       )}
 
-      {/* 求解按钮 */}
+      {/* Solve Button */}
       <button
         onClick={handleSolve}
         disabled={solving || autoPlaying}
@@ -217,7 +217,7 @@ export function SolverControl() {
         )}
       </button>
 
-      {/* 求解结果 */}
+      {/* Solve Result */}
       {result && (
         <div className={`p-4 rounded-lg ${result.success ? 'bg-green-50 border-2 border-green-200' : 'bg-red-50 border-2 border-red-200'}`}>
           {result.success ? (
@@ -242,7 +242,7 @@ export function SolverControl() {
                 </div>
               </div>
 
-              {/* 步骤进度 */}
+              {/* Step Progress */}
               {currentStep > 0 && (
                 <div className="bg-white/50 p-3 rounded-lg">
                   <div className="text-sm text-gray-600 mb-2">
@@ -257,7 +257,7 @@ export function SolverControl() {
                 </div>
               )}
 
-              {/* 控制按钮 */}
+              {/* Control Buttons */}
               <div className="flex gap-2">
                 {!autoPlaying ? (
                   <button

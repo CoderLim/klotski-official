@@ -89,7 +89,7 @@ export default function SolverPage() {
 
   const puzzleOptions = useMemo(
     () => [
-      { slug: CUSTOM_PUZZLE_SLUG, name: '🧩 自定义空棋盘' },
+      { slug: CUSTOM_PUZZLE_SLUG, name: '🧩 Custom Empty Board' },
       ...puzzles.map((puzzle) => ({ slug: puzzle.slug, name: puzzle.name })),
     ],
     [puzzles]
@@ -116,7 +116,7 @@ export default function SolverPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
-        <div className="text-white text-2xl">加载中...</div>
+        <div className="text-white text-2xl">Loading...</div>
       </div>
     );
   }
@@ -124,7 +124,7 @@ export default function SolverPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 py-8 px-4">
       <div className="container mx-auto max-w-7xl">
-        {/* 头部 */}
+        {/* Header */}
         <div className="mb-8 text-center">
           <Link 
             href="/"
@@ -141,12 +141,12 @@ export default function SolverPage() {
           </p>
         </div>
 
-        {/* 主内容区 */}
+        {/* Main Content */}
         <div className="grid lg:grid-cols-2 gap-8 items-start">
-          {/* 左侧：游戏棋盘 */}
+          {/* Left: Game Board */}
           <div className="space-y-4">
             <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6">
-              {/* 拼图选择下拉菜单 */}
+              {/* Puzzle Selection Dropdown */}
               <div className="mb-4">
                 <select
                   value={puzzleSlug}
@@ -193,7 +193,7 @@ export default function SolverPage() {
             
           </div>
 
-          {/* 右侧：求解器控制 */}
+          {/* Right: Solver Control */}
           <div className="space-y-4">
             <SolverControl />
 
@@ -201,7 +201,7 @@ export default function SolverPage() {
           </div>
         </div>
 
-        {/* 页脚 */}
+        {/* Footer */}
         <div className="mt-8 text-center text-white/80 text-sm">
           <p>Klotski Solver | Built with TypeScript + Next.js</p>
         </div>

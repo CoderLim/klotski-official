@@ -9,7 +9,7 @@ import { BlockData } from './types';
 
 // 1. 横刀立马
 const hengdaoConfig: PuzzleConfig = {
-  name: '横刀立马',
+  name: 'Heng Dao Li Ma',
   slug: 'hengdao',
   difficulty: 'hard',
   blocks: [
@@ -28,7 +28,7 @@ const hengdaoConfig: PuzzleConfig = {
 
 // 2. 指挥若定
 const zhihuiruodingConfig: PuzzleConfig = {
-  name: '指挥若定',
+  name: 'Zhi Hui Ruo Ding',
   slug: 'zhihuiruoding',
   difficulty: 'hard',
   blocks: [
@@ -47,7 +47,7 @@ const zhihuiruodingConfig: PuzzleConfig = {
 
 // 3. 将拥曹营
 const jiangyongcaoyingConfig: PuzzleConfig = {
-  name: '将拥曹营',
+  name: 'Jiang Yong Cao Ying',
   slug: 'jiangyongcaoying',
   difficulty: 'hard',
   blocks: [
@@ -66,7 +66,7 @@ const jiangyongcaoyingConfig: PuzzleConfig = {
 
 // 4. 齐头并进
 const qitoubingjinConfig: PuzzleConfig = {
-  name: '齐头并进',
+  name: 'Qi Tou Bing Jin',
   slug: 'qitoubingjin',
   difficulty: 'medium',
   blocks: [
@@ -85,7 +85,7 @@ const qitoubingjinConfig: PuzzleConfig = {
 
 // 5. 并分三路
 const bingfensanluConfig: PuzzleConfig = {
-  name: '并分三路',
+  name: 'Bing Fen San Lu',
   slug: 'bingfensanlu',
   difficulty: 'hard',
   blocks: [
@@ -104,7 +104,7 @@ const bingfensanluConfig: PuzzleConfig = {
 
 // 6. 雨声淅沥
 const yushengxiliConfig: PuzzleConfig = {
-  name: '雨声淅沥',
+  name: 'Yu Sheng Xi Li',
   slug: 'yushengxili',
   difficulty: 'medium',
   blocks: [
@@ -123,7 +123,7 @@ const yushengxiliConfig: PuzzleConfig = {
 
 // 7. 左右布兵
 const zuoyoububingConfig: PuzzleConfig = {
-  name: '左右布兵',
+  name: 'Zuo You Bu Bing',
   slug: 'zuoyoububing',
   difficulty: 'medium',
   blocks: [
@@ -142,7 +142,7 @@ const zuoyoububingConfig: PuzzleConfig = {
 
 // 8. 桃花园中
 const taohuayuanzhongConfig: PuzzleConfig = {
-  name: '桃花园中',
+  name: 'Tao Hua Yuan Zhong',
   slug: 'taohuayuanzhong',
   difficulty: 'hard',
   blocks: [
@@ -161,7 +161,7 @@ const taohuayuanzhongConfig: PuzzleConfig = {
 
 // 9. 一路进军
 const yilujinjunConfig: PuzzleConfig = {
-  name: '一路进军',
+  name: 'Yi Lu Jin Jun',
   slug: 'yilujinjun',
   difficulty: 'medium',
   blocks: [
@@ -180,7 +180,7 @@ const yilujinjunConfig: PuzzleConfig = {
 
 // 10. 一路顺风
 const yilushunfengConfig: PuzzleConfig = {
-  name: '一路顺风',
+  name: 'Yi Lu Shun Feng',
   slug: 'yilushunfeng',
   difficulty: 'medium',
   blocks: [
@@ -199,7 +199,7 @@ const yilushunfengConfig: PuzzleConfig = {
 
 // 11. 围而不歼
 const weierbujianConfig: PuzzleConfig = {
-  name: '围而不歼',
+  name: 'Wei Er Bu Jian',
   slug: 'weierbujian',
   difficulty: 'medium',
   blocks: [
@@ -218,7 +218,7 @@ const weierbujianConfig: PuzzleConfig = {
 
 // 12. 捷足先登
 const jiezuxiandengConfig: PuzzleConfig = {
-  name: '捷足先登',
+  name: 'Jie Zu Xian Deng',
   slug: 'jiezuxiandeng',
   difficulty: 'easy',
   blocks: [
@@ -237,7 +237,7 @@ const jiezuxiandengConfig: PuzzleConfig = {
 
 // 13. 插翅难飞
 const chachinanfeiConfig: PuzzleConfig = {
-  name: '插翅难飞',
+  name: 'Cha Chi Nan Fei',
   slug: 'chachinanfei',
   difficulty: 'medium',
   blocks: [
@@ -256,7 +256,7 @@ const chachinanfeiConfig: PuzzleConfig = {
 
 // 14. 守口如瓶 (变体1)
 const shoukourupingConfig: PuzzleConfig = {
-  name: '守口如瓶',
+  name: 'Shou Kou Ru Ping',
   slug: 'shoukouruping',
   difficulty: 'hard',
   blocks: [
@@ -275,7 +275,7 @@ const shoukourupingConfig: PuzzleConfig = {
 
 // 15. 守口如瓶 (变体2)
 const shoukouruping2Config: PuzzleConfig = {
-  name: '守口如瓶 (变体)',
+  name: 'Shou Kou Ru Ping (Variant)',
   slug: 'shoukouruping-2',
   difficulty: 'hard',
   blocks: [
@@ -294,7 +294,7 @@ const shoukouruping2Config: PuzzleConfig = {
 
 // 16. 双将挡路
 const shuangjiangdangluConfig: PuzzleConfig = {
-  name: '双将挡路',
+  name: 'Shuang Jiang Dang Lu',
   slug: 'shuangjiangdanglu',
   difficulty: 'medium',
   blocks: [
@@ -313,7 +313,7 @@ const shuangjiangdangluConfig: PuzzleConfig = {
 
 // 17. 横马当关
 const hengmadangguanConfig: PuzzleConfig = {
-  name: '横马当关',
+  name: 'Heng Ma Dang Guan',
   slug: 'hengmadangguan',
   difficulty: 'hard',
   blocks: [
@@ -332,7 +332,7 @@ const hengmadangguanConfig: PuzzleConfig = {
 
 // 18. 层层设防 (变体1)
 const cengcengshefangConfig: PuzzleConfig = {
-  name: '层层设防',
+  name: 'Ceng Ceng She Fang',
   slug: 'cengcengshefang',
   difficulty: 'hard',
   blocks: [
@@ -351,7 +351,7 @@ const cengcengshefangConfig: PuzzleConfig = {
 
 // 19. 层层设防 (变体2)
 const cengcengshefang2Config: PuzzleConfig = {
-  name: '层层设防 (变体)',
+  name: 'Ceng Ceng She Fang (Variant)',
   slug: 'cengcengshefang-2',
   difficulty: 'hard',
   blocks: [
@@ -370,7 +370,7 @@ const cengcengshefang2Config: PuzzleConfig = {
 
 // 20. 兵挡将阻
 const bingdangjiangzuConfig: PuzzleConfig = {
-  name: '兵挡将阻',
+  name: 'Bing Dang Jiang Zu',
   slug: 'bingdangjiangzu',
   difficulty: 'hard',
   blocks: [
@@ -389,7 +389,7 @@ const bingdangjiangzuConfig: PuzzleConfig = {
 
 // 21. 堵塞要道
 const dusaiyaodaoConfig: PuzzleConfig = {
-  name: '堵塞要道',
+  name: 'Du Sai Yao Dao',
   slug: 'dusaiyaodao',
   difficulty: 'hard',
   blocks: [
@@ -408,7 +408,7 @@ const dusaiyaodaoConfig: PuzzleConfig = {
 
 // 22. 瓮中之鳖
 const wengzhongzhibieConfig: PuzzleConfig = {
-  name: '瓮中之鳖',
+  name: 'Weng Zhong Zhi Bie',
   slug: 'wengzhongzhibie',
   difficulty: 'expert',
   blocks: [
@@ -427,7 +427,7 @@ const wengzhongzhibieConfig: PuzzleConfig = {
 
 // 23. 层峦叠嶂
 const cengluandiezhangConfig: PuzzleConfig = {
-  name: '层峦叠嶂',
+  name: 'Ceng Luan Die Zhang',
   slug: 'cengluandiezhang',
   difficulty: 'expert',
   blocks: [
@@ -446,7 +446,7 @@ const cengluandiezhangConfig: PuzzleConfig = {
 
 // 24. 水泄不通
 const shuixiebutongConfig: PuzzleConfig = {
-  name: '水泄不通',
+  name: 'Shui Xie Bu Tong',
   slug: 'shuixiebutong',
   difficulty: 'expert',
   blocks: [
@@ -465,7 +465,7 @@ const shuixiebutongConfig: PuzzleConfig = {
 
 // 25. 四路进兵
 const silujinbingConfig: PuzzleConfig = {
-  name: '四路进兵',
+  name: 'Si Lu Jin Bing',
   slug: 'silujinbing',
   difficulty: 'expert',
   blocks: [
@@ -484,7 +484,7 @@ const silujinbingConfig: PuzzleConfig = {
 
 // 26. 入地无门
 const rudiwumenConfig: PuzzleConfig = {
-  name: '入地无门',
+  name: 'Ru Di Wu Men',
   slug: 'rudiwumen',
   difficulty: 'expert',
   blocks: [
@@ -503,7 +503,7 @@ const rudiwumenConfig: PuzzleConfig = {
 
 // 27. 勇闯五关
 const yongchuangwuguanConfig: PuzzleConfig = {
-  name: '勇闯五关',
+  name: 'Yong Chuang Wu Guan',
   slug: 'yongchuangwuguan',
   difficulty: 'expert',
   blocks: [
@@ -522,7 +522,7 @@ const yongchuangwuguanConfig: PuzzleConfig = {
 
 // 28. 四面楚歌
 const simianchugeConfig: PuzzleConfig = {
-  name: '四面楚歌',
+  name: 'Si Mian Chu Ge',
   slug: 'simianchuge',
   difficulty: 'hard',
   blocks: [
@@ -541,7 +541,7 @@ const simianchugeConfig: PuzzleConfig = {
 
 // 29. 前呼后拥
 const qianhuhouyongConfig: PuzzleConfig = {
-  name: '前呼后拥',
+  name: 'Qian Hu Hou Yong',
   slug: 'qianhuhouyong',
   difficulty: 'hard',
   blocks: [
@@ -560,7 +560,7 @@ const qianhuhouyongConfig: PuzzleConfig = {
 
 // 30. 兵临曹营
 const binglincaoyingConfig: PuzzleConfig = {
-  name: '兵临曹营',
+  name: 'Bing Lin Cao Ying',
   slug: 'binglincaoying',
   difficulty: 'hard',
   blocks: [
@@ -579,7 +579,7 @@ const binglincaoyingConfig: PuzzleConfig = {
 
 // 31. 五将逼宫
 const wujiangbigongConfig: PuzzleConfig = {
-  name: '五将逼宫',
+  name: 'Wu Jiang Bi Gong',
   slug: 'wujiangbigong',
   difficulty: 'hard',
   blocks: [
@@ -598,7 +598,7 @@ const wujiangbigongConfig: PuzzleConfig = {
 
 // 32. 前挡后阻
 const qiandanghouzuConfig: PuzzleConfig = {
-  name: '前挡后阻',
+  name: 'Qian Dang Hou Zu',
   slug: 'qiandanghouzu',
   difficulty: 'hard',
   blocks: [
@@ -617,7 +617,7 @@ const qiandanghouzuConfig: PuzzleConfig = {
 
 // 33. 近在咫尺
 const jinzaichichiConfig: PuzzleConfig = {
-  name: '近在咫尺',
+  name: 'Jin Zai Zhi Chi',
   slug: 'jinzaichichi',
   difficulty: 'easy',
   blocks: [
@@ -636,7 +636,7 @@ const jinzaichichiConfig: PuzzleConfig = {
 
 // 34. 走投无路
 const zoutouwuluConfig: PuzzleConfig = {
-  name: '走投无路',
+  name: 'Zou Tou Wu Lu',
   slug: 'zoutouwulu',
   difficulty: 'hard',
   blocks: [
@@ -655,7 +655,7 @@ const zoutouwuluConfig: PuzzleConfig = {
 
 // 35. 小燕出巢
 const xiaoyanchuchaoConfig: PuzzleConfig = {
-  name: '小燕出巢',
+  name: 'Xiao Yan Chu Chao',
   slug: 'xiaoyanchuchao',
   difficulty: 'medium',
   blocks: [
@@ -674,7 +674,7 @@ const xiaoyanchuchaoConfig: PuzzleConfig = {
 
 // 36. 比翼横空
 const biyihengkongConfig: PuzzleConfig = {
-  name: '比翼横空',
+  name: 'Bi Yi Heng Kong',
   slug: 'biyihengkong',
   difficulty: 'hard',
   blocks: [
@@ -693,7 +693,7 @@ const biyihengkongConfig: PuzzleConfig = {
 
 // 37. 夹道藏兵
 const jiadaocangbingConfig: PuzzleConfig = {
-  name: '夹道藏兵',
+  name: 'Jia Dao Cang Bing',
   slug: 'jiadaocangbing',
   difficulty: 'hard',
   blocks: [
@@ -712,7 +712,7 @@ const jiadaocangbingConfig: PuzzleConfig = {
 
 // 38. 屯兵东路
 const tunbingdongluConfig: PuzzleConfig = {
-  name: '屯兵东路',
+  name: 'Tun Bing Dong Lu',
   slug: 'tunbingdonglu',
   difficulty: 'medium',
   blocks: [
@@ -731,7 +731,7 @@ const tunbingdongluConfig: PuzzleConfig = {
 
 // 39. 四将连关
 const sijianglianguanConfig: PuzzleConfig = {
-  name: '四将连关',
+  name: 'Si Jiang Lian Guan',
   slug: 'sijianglianguan',
   difficulty: 'hard',
   blocks: [
@@ -750,7 +750,7 @@ const sijianglianguanConfig: PuzzleConfig = {
 
 // 40. 峰回路转
 const fenghuiluzhuanConfig: PuzzleConfig = {
-  name: '峰回路转',
+  name: 'Feng Hui Lu Zhuan',
   slug: 'fenghuiluzhuan',
   difficulty: 'hard',
   blocks: [
