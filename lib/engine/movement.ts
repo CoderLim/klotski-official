@@ -108,3 +108,4 @@ export function calculateMoveDistance(from: Position, to: Position): { rows: num
   };
 }
 
+
