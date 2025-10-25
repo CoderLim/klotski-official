@@ -124,22 +124,6 @@ export default function SolverPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 py-8 px-4">
       <div className="container mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <Link 
-            href="/"
-            className="inline-flex items-center space-x-2 text-white hover:text-yellow-200 transition-colors mb-4"
-          >
-            <span className="text-2xl">←</span>
-            <span className="font-semibold">Back to Game</span>
-          </Link>
-          <h1 className="text-5xl font-bold text-white mb-2">
-            🤖 Klotski Solver
-          </h1>
-          <p className="text-xl text-white/90">
-            Let AI help you find the optimal solution path
-          </p>
-        </div>
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-2 gap-8 items-start">

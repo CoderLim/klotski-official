@@ -178,14 +178,7 @@ export function SolverControl() {
     <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 space-y-4">
       
       {/* Klotski Library Status */}
-      {klotskiAvailable ? (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-          <div className="flex items-center space-x-2 text-green-700">
-            <span className="text-lg">✅</span>
-            <span className="font-medium">Professional Klotski Library Ready</span>
-          </div>
-        </div>
-      ) : (
+      {!klotskiAvailable && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3">
           <div className="flex items-center space-x-2 text-red-700">
             <span className="text-lg">❌</span>
