@@ -1,24 +1,117 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { useGameStore } from '@/lib/store/useGameStore';
+import { useEffect, useMemo, useState, type DragEvent } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Board from '@/components/game/Board';
 import { SolverControl } from '@/components/ui/SolverControl';
-import Link from 'next/link';
+import { useGameStore } from '@/lib/store/useGameStore';
 import { getAllPuzzles } from '@/lib/puzzles';
+import { Shape } from '@/lib/puzzles/types';
+import { getBlockName, getColorByShape } from '@/lib/utils/colors';
+import { useShallow } from 'zustand/react/shallow';
+
+const CUSTOM_PUZZLE_SLUG = 'custom';
+
+const PALETTE_SHAPES: Shape[] = [
+  [2, 2],
+  [2, 1],
+  [1, 2],
+  [1, 1],
+];
+
+function PaletteItem({ shape }: { shape: Shape }) {
+  const label = getBlockName(shape);
+  const color = getColorByShape(shape);
+  const [rows, cols] = shape;
+
+  const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.effectAllowed = 'copy';
+    e.dataTransfer.setData(
+      'application/json',
+      JSON.stringify({ shape })
+    );
+
+    const dragPreview = document.createElement('div');
+    dragPreview.style.width = `${cols * 40}px`;
+    dragPreview.style.height = `${rows * 40}px`;
+    dragPreview.style.background = color;
+    dragPreview.style.opacity = '0.8';
+    dragPreview.style.borderRadius = '8px';
+    dragPreview.style.border = '2px solid rgba(0,0,0,0.15)';
+    document.body.appendChild(dragPreview);
+    e.dataTransfer.setDragImage(dragPreview, (cols * 40) / 2, (rows * 40) / 2);
+    setTimeout(() => document.body.removeChild(dragPreview), 0);
+  };
+
+  return (
+    <div
+      draggable
+      onDragStart={handleDragStart}
+      className="flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing"
+    >
+      <div
+        className="grid place-items-center rounded-lg shadow-inner border-2 border-white"
+        style={{
+          backgroundColor: color,
+          width: cols * 48,
+          height: rows * 48,
+        }}
+      />
+      <span className="text-xs text-gray-500">{rows}×{cols}</span>
+    </div>
+  );
+}
 
 export default function SolverPage() {
   const searchParams = useSearchParams();
-  const puzzleSlug = searchParams.get('puzzle') || 'hengdao';
-  const { loadPuzzle, currentPuzzle, reset } = useGameStore();
+  const router = useRouter();
+  const puzzleSlug = searchParams.get('puzzle') || CUSTOM_PUZZLE_SLUG;
+  const {
+    loadPuzzle,
+    loadCustomBoard,
+    reset,
+    isCustomBoard,
+    selectedBlockId,
+    removeBlock,
+  } = useGameStore(
+    useShallow((state) => ({
+      loadPuzzle: state.loadPuzzle,
+      loadCustomBoard: state.loadCustomBoard,
+      reset: state.reset,
+      isCustomBoard: state.isCustomBoard,
+      selectedBlockId: state.selectedBlockId,
+      removeBlock: state.removeBlock,
+    }))
+  );
   const [mounted, setMounted] = useState(false);
   const puzzles = getAllPuzzles();
 
+  const puzzleOptions = useMemo(
+    () => [
+      { slug: CUSTOM_PUZZLE_SLUG, name: '🧩 自定义空棋盘' },
+      ...puzzles.map((puzzle) => ({ slug: puzzle.slug, name: puzzle.name })),
+    ],
+    [puzzles]
+  );
+
   useEffect(() => {
     setMounted(true);
-    loadPuzzle(puzzleSlug);
-  }, [puzzleSlug, loadPuzzle]);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    if (puzzleSlug === CUSTOM_PUZZLE_SLUG) {
+      loadCustomBoard();
+    } else {
+      loadPuzzle(puzzleSlug);
+    }
+  }, [mounted, puzzleSlug, loadPuzzle, loadCustomBoard]);
+
+  const handlePuzzleChange = (newSlug: string) => {
+    router.replace(`/solver?puzzle=${encodeURIComponent(newSlug)}`, { scroll: false });
+  };
 
   if (!mounted) {
     return (
@@ -60,14 +153,14 @@ export default function SolverPage() {
                   onChange={(e) => {
                     const newSlug = e.target.value;
                     if (newSlug !== puzzleSlug) {
-                      loadPuzzle(newSlug);
+                      handlePuzzleChange(newSlug);
                     }
                   }}
                   className="w-full px-3 py-2 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-lg font-semibold text-gray-800 shadow-sm"
                 >
-                  {puzzles.slice(0, 8).map((puzzle) => (
-                    <option key={puzzle.slug} value={puzzle.slug}>
-                      {puzzle.name}
+                  {puzzleOptions.map((option) => (
+                    <option key={option.slug} value={option.slug}>
+                      {option.name}
                     </option>
                   ))}
                 </select>
@@ -77,15 +170,27 @@ export default function SolverPage() {
                 <Board />
               </div>
 
+              {isCustomBoard && (
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 space-y-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {PALETTE_SHAPES.map((shape) => (
+                      <div key={shape.join('x')} className="bg-white rounded-lg border border-gray-200 p-3 flex flex-col items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
+                        <PaletteItem shape={shape} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <button
                 onClick={reset}
                 className="w-full mt-4 py-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all"
               >
-                🔄 Reset Board
+                {isCustomBoard ? '🧼 Clear Board' : '🔄 Reset Board'}
               </button>
             </div>
 
+            
           </div>
 
           {/* 右侧：求解器控制 */}
@@ -104,4 +209,3 @@ export default function SolverPage() {
     </div>
   );
 }
-

@@ -1,13 +1,17 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { BlockData, Position, MoveHistory, PuzzleConfig } from '../puzzles/types';
+import { BlockData, Position, MoveHistory, PuzzleConfig, Shape } from '../puzzles/types';
 import { getPuzzleBySlug, initializeBlocks } from '../puzzles';
 import { checkWin } from '../engine/win';
 import { canMoveTo } from '../engine/movement';
+import { isWithinBounds } from '../engine/validation';
+import { occupiesCells, hasOverlap } from '../utils/grid';
+import { getColorByShape } from '../utils/colors';
 
 interface GameState {
   // 游戏数据
   currentPuzzle: PuzzleConfig | null;
+  isCustomBoard: boolean;
   blocks: BlockData[];
   moves: number;
   startTime: number | null;
@@ -21,7 +25,10 @@ interface GameState {
   
   // Actions
   loadPuzzle: (slug: string) => void;
+  loadCustomBoard: (blocks?: BlockData[]) => void;
   moveBlock: (blockId: string, newPosition: Position) => boolean;
+  addBlock: (shape: Shape, position: Position) => string | null;
+  removeBlock: (blockId: string) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -94,6 +101,7 @@ export const useGameStore = create<GameState>()(
   immer((set, get) => ({
     // 初始状态
     currentPuzzle: null,
+    isCustomBoard: false,
     blocks: [],
     moves: 0,
     startTime: null,
@@ -116,6 +124,7 @@ export const useGameStore = create<GameState>()(
 
       set((state) => {
         state.currentPuzzle = puzzle;
+        state.isCustomBoard = false;
         
         // 检查保存的状态是否已经胜利
         const isSavedStateWin = savedState && savedState.blocks ? checkWin(savedState.blocks) : false;
@@ -143,6 +152,22 @@ export const useGameStore = create<GameState>()(
         }
         
         state.isWin = false; // 加载时总是设置为未胜利
+        state.selectedBlockId = null;
+      });
+    },
+
+    // 自定义棋盘（空白或预设）
+    loadCustomBoard: (blocks: BlockData[] = []) => {
+      set((state) => {
+        state.currentPuzzle = null;
+        state.isCustomBoard = true;
+        state.blocks = blocks;
+        state.moves = 0;
+        state.startTime = null;
+        state.elapsedTime = 0;
+        state.history = [];
+        state.historyIndex = -1;
+        state.isWin = false;
         state.selectedBlockId = null;
       });
     },
@@ -199,6 +224,64 @@ export const useGameStore = create<GameState>()(
       return true;
     },
 
+    // 自定义：新增方块
+    addBlock: (shape: Shape, position: Position) => {
+      const state = get();
+
+      if (!state.isCustomBoard) {
+        return null;
+      }
+
+      if (!isWithinBounds(shape, position)) {
+        return null;
+      }
+
+      const newCells = occupiesCells(shape, position);
+      const overlaps = state.blocks.some((existing) => {
+        const existingCells = occupiesCells(existing.shape, existing.position);
+        return hasOverlap(newCells, existingCells);
+      });
+
+      if (overlaps) {
+        return null;
+      }
+
+      const newBlock: BlockData = {
+        id: `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+        shape,
+        position,
+        color: getColorByShape(shape),
+      };
+
+      set((draft) => {
+        draft.blocks.push(newBlock);
+        draft.moves = 0;
+        draft.history = [];
+        draft.historyIndex = -1;
+        draft.isWin = checkWin(draft.blocks);
+        draft.selectedBlockId = newBlock.id;
+      });
+
+      return newBlock.id;
+    },
+
+    // 自定义：删除方块
+    removeBlock: (blockId: string) => {
+      const state = get();
+      if (!state.isCustomBoard) {
+        return;
+      }
+
+      set((draft) => {
+        draft.blocks = draft.blocks.filter((block) => block.id !== blockId);
+        draft.selectedBlockId = draft.selectedBlockId === blockId ? null : draft.selectedBlockId;
+        draft.moves = 0;
+        draft.history = [];
+        draft.historyIndex = -1;
+        draft.isWin = checkWin(draft.blocks);
+      });
+    },
+
     // 撤销
     undo: () => {
       const state = get();
@@ -252,6 +335,20 @@ export const useGameStore = create<GameState>()(
     // 重置
     reset: () => {
       const state = get();
+      if (state.isCustomBoard) {
+        set((draft) => {
+          draft.blocks = [];
+          draft.moves = 0;
+          draft.startTime = null;
+          draft.elapsedTime = 0;
+          draft.history = [];
+          draft.historyIndex = -1;
+          draft.isWin = false;
+          draft.selectedBlockId = null;
+        });
+        return;
+      }
+
       if (!state.currentPuzzle) return;
 
       // 清除保存的状态
@@ -292,4 +389,3 @@ export const useGameStore = create<GameState>()(
     },
   }))
 );
-
