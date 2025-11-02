@@ -3,9 +3,9 @@ import { I18nProvider } from '@/lib/i18n/I18nProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Klotski Puzzle Game - 华容道',
-  description: 'Classic Chinese sliding block puzzle game - 经典中国益智游戏华容道',
-  keywords: ['华容道', 'Klotski', '益智游戏', '拼图', 'puzzle game'],
+  title: 'Klotski Puzzle Game',
+  description: 'Classic Chinese sliding block puzzle game - Move blocks to help Cao Cao escape through Huarong Pass',
+  keywords: ['Klotski', 'puzzle game', 'sliding block puzzle', 'Huarong Pass', 'Cao Cao'],
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh">
+    <html lang="en">
       <head>
         {/* CrazyGames SDK */}
         <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>

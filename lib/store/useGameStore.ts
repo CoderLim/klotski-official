@@ -42,6 +42,18 @@ interface GameState {
 }
 
 const STORAGE_KEY_PREFIX = 'klotski-game-';
+const RECORDS_STORAGE_KEY = 'klotski-completion-records';
+
+export interface CompletionRecord {
+  slug: string;
+  moves: number;
+  time: number; // 单位：秒
+  completedAt: number; // 时间戳
+}
+
+interface CompletionRecords {
+  [slug: string]: CompletionRecord;
+}
 
 /**
  * 从 localStorage 加载游戏状态
@@ -97,6 +109,62 @@ export function clearGameState(slug: string) {
   localStorage.removeItem(`${STORAGE_KEY_PREFIX}${slug}`);
 }
 
+/**
+ * 保存通关记录
+ */
+function saveCompletionRecord(slug: string, moves: number, time: number) {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    const recordsStr = localStorage.getItem(RECORDS_STORAGE_KEY);
+    const records: CompletionRecords = recordsStr ? JSON.parse(recordsStr) : {};
+    
+    records[slug] = {
+      slug,
+      moves,
+      time,
+      completedAt: Date.now(),
+    };
+    
+    localStorage.setItem(RECORDS_STORAGE_KEY, JSON.stringify(records));
+  } catch (error) {
+    console.error('保存通关记录失败:', error);
+  }
+}
+
+/**
+ * 获取通关记录
+ */
+export function getCompletionRecord(slug: string): CompletionRecord | null {
+  if (typeof window === 'undefined') return null;
+  
+  try {
+    const recordsStr = localStorage.getItem(RECORDS_STORAGE_KEY);
+    if (!recordsStr) return null;
+    
+    const records: CompletionRecords = JSON.parse(recordsStr);
+    return records[slug] || null;
+  } catch (error) {
+    console.error('获取通关记录失败:', error);
+    return null;
+  }
+}
+
+/**
+ * 获取所有通关记录
+ */
+export function getAllCompletionRecords(): CompletionRecords {
+  if (typeof window === 'undefined') return {};
+  
+  try {
+    const recordsStr = localStorage.getItem(RECORDS_STORAGE_KEY);
+    return recordsStr ? JSON.parse(recordsStr) : {};
+  } catch (error) {
+    console.error('获取所有通关记录失败:', error);
+    return {};
+  }
+}
+
 export const useGameStore = create<GameState>()(
   immer((set, get) => ({
     // 初始状态
@@ -143,6 +211,7 @@ export const useGameStore = create<GameState>()(
             // 清除已胜利的保存状态
             clearGameState(slug);
           }
+          // 重置为新游戏，moves 和 time 都从 0 开始
           state.blocks = initializeBlocks(puzzle);
           state.moves = 0;
           state.startTime = null;
@@ -185,6 +254,8 @@ export const useGameStore = create<GameState>()(
       if (!block) return false;
 
       const oldPosition = block.position;
+      const wasWinBefore = state.isWin;
+      const currentPuzzleSlug = state.currentPuzzle?.slug;
 
       set((draft) => {
         const targetBlock = draft.blocks.find((b) => b.id === blockId);
@@ -219,6 +290,14 @@ export const useGameStore = create<GameState>()(
       const newState = get();
       if (newState.currentPuzzle) {
         saveGameState(newState.currentPuzzle.slug, newState);
+        
+        // 如果刚完成通关（从非胜利状态变为胜利状态），保存通关记录
+        if (!wasWinBefore && newState.isWin && currentPuzzleSlug) {
+          const finalTime = newState.startTime 
+            ? Math.floor((Date.now() - newState.startTime) / 1000)
+            : newState.elapsedTime;
+          saveCompletionRecord(currentPuzzleSlug, newState.moves, finalTime);
+        }
       }
 
       return true;

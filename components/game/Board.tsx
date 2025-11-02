@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback, useRef, useState, type DragEvent } from 'react';
+import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { tryMoveByKey } from '@/lib/engine/movement';
 import { BOARD_ROWS, BOARD_COLS, CELL_SIZE, CELL_GAP } from '@/lib/utils/grid';
@@ -10,6 +11,7 @@ import { Shape } from '@/lib/puzzles/types';
 import { useShallow } from 'zustand/react/shallow';
 
 export default function Board() {
+  const t = useTranslations('board');
   const { blocks, selectedBlockId, selectBlock, moveBlock, addBlock, isCustomBoard } =
     useGameStore(
       useShallow((state) => ({
@@ -272,13 +274,13 @@ export default function Board() {
         }
 
         if (!createdId) {
-          console.warn('无法在该位置放置方块，请确认是否越界或与其他方块重叠。');
+          console.warn(t('cantPlace'));
         }
       } catch (error) {
-        console.error('解析拖入数据失败:', error);
+        console.error(t('parseError'), error);
       }
     },
-    [addBlock, cellSize, isCustomBoard]
+    [addBlock, cellSize, isCustomBoard, t]
   );
 
   return (
@@ -301,7 +303,7 @@ export default function Board() {
             isDragActive ? 'border-blue-500 shadow-blue-300/70' : 'border-amber-800'
           }`}
           role="grid"
-          aria-label="华容道棋盘"
+          aria-label={t('ariaLabel')}
         >
           {/* 网格背景 */}
           <div className="absolute inset-0 pointer-events-none">
@@ -332,7 +334,7 @@ export default function Board() {
               height: 2 * cellSize - CELL_GAP,
             }}
             className="border-4 border-dashed border-red-400/50 rounded-lg bg-red-100/20 pointer-events-none flex items-center justify-center"
-            aria-label="目标出口"
+            aria-label={t('exitLabel')}
           >
             <span className="text-4xl opacity-30">🚪</span>
           </div>

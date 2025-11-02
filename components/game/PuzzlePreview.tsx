@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { PuzzleConfig } from '@/lib/puzzles/types';
 import { getColorByShape } from '@/lib/utils/colors';
 import { WIN_POSITION } from '@/lib/engine/win';
@@ -10,6 +11,7 @@ interface PuzzlePreviewProps {
 }
 
 export default function PuzzlePreview({ puzzle, size = 160 }: PuzzlePreviewProps) {
+  const tCommon = useTranslations('common');
   const BOARD_ROWS = 5;
   const BOARD_COLS = 4;
   const CELL_SIZE = size / BOARD_ROWS; // 动态计算单元格大小
@@ -91,7 +93,7 @@ export default function PuzzlePreview({ puzzle, size = 160 }: PuzzlePreviewProps
             {/* 曹操标记 */}
             {isTarget && (
               <div className="w-full h-full flex items-center justify-center">
-                <span className="text-white font-bold text-xs opacity-60">曹</span>
+                <span className="text-white font-bold text-xs opacity-60">{tCommon('caocao').charAt(0)}</span>
               </div>
             )}
           </div>

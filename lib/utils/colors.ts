@@ -22,20 +22,21 @@ export function getColorByShape(shape: Shape): string {
 }
 
 /**
- * 获取方块的显示名称
+ * 获取方块的显示名称（英文）
+ * 注意：此函数返回英文名称，如需国际化请使用组件中的 useTranslations
  */
 export function getBlockName(shape: Shape): string {
   const [rows, cols] = shape;
   const key = `${rows}x${cols}`;
 
   const nameMap: Record<string, string> = {
-    '2x2': '曹操',
-    '2x1': '竖将',
-    '1x2': '横将',
-    '1x1': '小兵',
+    '2x2': 'Cao Cao',
+    '2x1': 'Vertical General',
+    '1x2': 'Horizontal General',
+    '1x1': 'Soldier',
   };
 
-  return nameMap[key] || '未知方块';
+  return nameMap[key] || 'Unknown Block';
 }
 
 /**

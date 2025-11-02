@@ -2,7 +2,9 @@
   "common": {
     "appName": "华容道",
     "subtitle": "中国传统益智游戏",
-    "description": "移动方块让曹操从华容道逃脱"
+    "description": "移动方块让曹操从华容道逃脱",
+    "loading": "加载中...",
+    "caocao": "曹操"
   },
   "difficulty": {
     "easy": "简单",
@@ -64,6 +66,33 @@
     "playAgain": "再来一次",
     "nextLevel": "下一关",
     "backHome": "返回首页"
+  },
+  "solver": {
+    "customBoard": "自定义空棋盘",
+    "clearBoard": "清空棋盘",
+    "resetBoard": "重置棋盘",
+    "footer": "华容道求解器 | 使用 TypeScript + Next.js 构建"
+  },
+  "hint": {
+    "button": "提示",
+    "thinking": "思考中...",
+    "title": "AI 提示下一步",
+    "noHint": "无法找到下一步提示",
+    "error": "获取提示失败"
+  },
+  "board": {
+    "ariaLabel": "华容道棋盘",
+    "exitLabel": "目标出口",
+    "blockPosition": "{name}，位置：第{row}行第{col}列",
+    "cantPlace": "无法在该位置放置方块，请确认是否越界或与其他方块重叠。",
+    "parseError": "解析拖入数据失败"
+  },
+  "blocks": {
+    "caocao": "曹操",
+    "vertical": "竖将",
+    "horizontal": "横将",
+    "soldier": "小兵",
+    "unknown": "未知方块"
   }
 }
 

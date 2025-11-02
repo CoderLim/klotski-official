@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { BlockData, Position } from '@/lib/puzzles/types';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { calculateDragPosition, canMoveTo } from '@/lib/engine/movement';
@@ -14,6 +15,9 @@ interface BlockProps {
 }
 
 export default function Block({ block, cellSize = CELL_SIZE }: BlockProps) {
+  const t = useTranslations('blocks');
+  const tBoard = useTranslations('board');
+  const tCommon = useTranslations('common');
   const { blocks, moveBlock, selectedBlockId, selectBlock } = useGameStore();
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -169,14 +173,25 @@ export default function Block({ block, cellSize = CELL_SIZE }: BlockProps) {
         damping: 30,
       }}
       role="button"
-      aria-label={`${getBlockName(block.shape)}，位置：第${row + 1}行第${col + 1}列`}
+      aria-label={tBoard('blockPosition', { 
+        name: (() => {
+          const [rows, cols] = block.shape;
+          if (rows === 2 && cols === 2) return t('caocao');
+          if (rows === 2 && cols === 1) return t('vertical');
+          if (rows === 1 && cols === 2) return t('horizontal');
+          if (rows === 1 && cols === 1) return t('soldier');
+          return t('unknown');
+        })(), 
+        row: row + 1, 
+        col: col + 1 
+      })}
       aria-pressed={isSelected}
       tabIndex={0}
     >
       {/* 方块内容 - 显示名称（可选） */}
       <div className="w-full h-full flex items-center justify-center">
         <span className="text-white font-bold text-shadow select-none pointer-events-none opacity-75">
-          {isTarget ? '曹操' : ''}
+          {isTarget ? tCommon('caocao') : ''}
         </span>
       </div>
     </motion.div>

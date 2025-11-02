@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type DragEvent } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Board from '@/components/game/Board';
 import { SolverControl } from '@/components/ui/SolverControl';
@@ -64,6 +65,8 @@ function PaletteItem({ shape }: { shape: Shape }) {
 }
 
 export default function SolverPage() {
+  const t = useTranslations('solver');
+  const tCommon = useTranslations('common');
   const searchParams = useSearchParams();
   const router = useRouter();
   const puzzleSlug = searchParams.get('puzzle') || CUSTOM_PUZZLE_SLUG;
@@ -89,10 +92,10 @@ export default function SolverPage() {
 
   const puzzleOptions = useMemo(
     () => [
-      { slug: CUSTOM_PUZZLE_SLUG, name: '🧩 Custom Empty Board' },
+      { slug: CUSTOM_PUZZLE_SLUG, name: `🧩 ${t('customBoard')}` },
       ...puzzles.map((puzzle) => ({ slug: puzzle.slug, name: puzzle.name })),
     ],
-    [puzzles]
+    [puzzles, t]
   );
 
   useEffect(() => {
@@ -116,7 +119,7 @@ export default function SolverPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
-        <div className="text-white text-2xl">Loading...</div>
+        <div className="text-white text-2xl">{tCommon('loading')}</div>
       </div>
     );
   }
@@ -170,7 +173,7 @@ export default function SolverPage() {
                 onClick={reset}
                 className="w-full mt-4 py-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all"
               >
-                {isCustomBoard ? '🧼 Clear Board' : '🔄 Reset Board'}
+                {isCustomBoard ? `🧼 ${t('clearBoard')}` : `🔄 ${t('resetBoard')}`}
               </button>
             </div>
 
@@ -187,7 +190,7 @@ export default function SolverPage() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-white/80 text-sm">
-          <p>Klotski Solver | Built with TypeScript + Next.js</p>
+          <p>{t('footer')}</p>
         </div>
       </div>
     </div>

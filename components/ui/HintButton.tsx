@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { solveKlotski } from '@/lib/solver';
 
 export function HintButton() {
+  const t = useTranslations('hint');
   const { blocks, moveBlock } = useGameStore();
   const [loading, setLoading] = useState(false);
 
@@ -24,11 +26,11 @@ export function HintButton() {
           moveBlock(nextMove.blockId, nextMove.to);
         }
       } else {
-        alert('无法找到下一步提示');
+        alert(t('noHint'));
       }
     } catch (error) {
-      console.error('获取提示失败:', error);
-      alert('获取提示失败');
+      console.error(t('error'), error);
+      alert(t('error'));
     } finally {
       setLoading(false);
     }
@@ -43,10 +45,10 @@ export function HintButton() {
           ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
           : 'bg-yellow-400 text-gray-800 hover:bg-yellow-500 shadow-md hover:shadow-lg'
       }`}
-      title="AI 提示下一步"
+      title={t('title')}
     >
       <span className="text-xl">💡</span>
-      <span>{loading ? '思考中...' : '提示'}</span>
+      <span>{loading ? t('thinking') : t('button')}</span>
     </button>
   );
 }

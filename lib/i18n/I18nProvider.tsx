@@ -12,7 +12,7 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
-const DEFAULT_LOCALE: Locale = 'zh';
+const DEFAULT_LOCALE: Locale = 'en';
 const LOCALE_STORAGE_KEY = 'klotski-locale';
 
 // 所有支持的语言

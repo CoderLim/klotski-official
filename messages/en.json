@@ -2,7 +2,9 @@
   "common": {
     "appName": "Klotski",
     "subtitle": "Chinese Traditional Sliding Block Puzzle",
-    "description": "Move blocks to help Cao Cao escape through Huarong Pass"
+    "description": "Move blocks to help Cao Cao escape through Huarong Pass",
+    "loading": "Loading...",
+    "caocao": "Cao Cao"
   },
   "difficulty": {
     "easy": "Easy",
@@ -64,6 +66,33 @@
     "playAgain": "Play Again",
     "nextLevel": "Next Level",
     "backHome": "Back to Home"
+  },
+  "solver": {
+    "customBoard": "Custom Empty Board",
+    "clearBoard": "Clear Board",
+    "resetBoard": "Reset Board",
+    "footer": "Klotski Solver | Built with TypeScript + Next.js"
+  },
+  "hint": {
+    "button": "Hint",
+    "thinking": "Thinking...",
+    "title": "AI Next Step Hint",
+    "noHint": "Unable to find next step hint",
+    "error": "Failed to get hint"
+  },
+  "board": {
+    "ariaLabel": "Klotski Board",
+    "exitLabel": "Target Exit",
+    "blockPosition": "{name}, position: Row {row}, Column {col}",
+    "cantPlace": "Cannot place block at this position. Please check if it's out of bounds or overlaps with other blocks.",
+    "parseError": "Failed to parse drag data"
+  },
+  "blocks": {
+    "caocao": "Cao Cao",
+    "vertical": "Vertical General",
+    "horizontal": "Horizontal General",
+    "soldier": "Soldier",
+    "unknown": "Unknown Block"
   }
 }
 

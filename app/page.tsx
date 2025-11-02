@@ -14,6 +14,7 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 export default function HomePage() {
   const t = useTranslations('controls');
+  const tCommon = useTranslations('common');
   const {
     loadPuzzle,
     currentPuzzle,
@@ -101,7 +102,7 @@ export default function HomePage() {
   if (!currentPuzzle) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading...</div>
+        <div className="text-white text-2xl">{tCommon('loading')}</div>
       </div>
     );
   }
