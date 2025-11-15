@@ -1,15 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store/useGameStore';
 import { getPuzzleIndex } from '@/lib/puzzles';
 import { formatTime } from '@/lib/utils/grid';
 import LanguageSwitcher from './LanguageSwitcher';
+import HistoryDialog from './HistoryDialog';
 
 export default function HUD() {
   const t = useTranslations('hud');
-  const { currentPuzzle, moves, startTime, elapsedTime, isWin, setElapsedTime } = useGameStore();
+  const tHistory = useTranslations('history');
+  const { currentPuzzle, moves, startTime, elapsedTime, isWin, setElapsedTime, loadPuzzle } = useGameStore();
+  const [showHistory, setShowHistory] = useState(false);
 
   // 计时器
   useEffect(() => {
@@ -73,8 +76,27 @@ export default function HUD() {
               </div>
             </div>
           </div>
+
+          {/* 历史记录按钮 */}
+          <button
+            onClick={() => setShowHistory(true)}
+            className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-lg transition-all transform hover:scale-105 active:scale-95 border border-purple-500"
+            aria-label={tHistory('viewHistory')}
+          >
+            <span className="text-xl">📜</span>
+            <span>{tHistory('viewHistory')}</span>
+          </button>
         </div>
       </div>
+
+      {/* 历史记录对话框 */}
+      <HistoryDialog
+        isOpen={showHistory}
+        onClose={() => setShowHistory(false)}
+        onSelectPuzzle={(slug) => {
+          loadPuzzle(slug, true); // 标记为 replay
+        }}
+      />
     </div>
   );
 }

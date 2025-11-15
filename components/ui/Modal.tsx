@@ -8,9 +8,19 @@ interface ModalProps {
   onClose: () => void;
   children: ReactNode;
   title?: string;
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '4xl' | 'full';
 }
 
-export default function Modal({ isOpen, onClose, children, title }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, title, maxWidth = 'md' }: ModalProps) {
+  const maxWidthClasses = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    '4xl': 'max-w-4xl',
+    full: 'max-w-full',
+  };
   // ESC键关闭
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -45,7 +55,7 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', duration: 0.3 }}
-              className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl shadow-2xl max-w-md w-full border-2 border-gray-700"
+              className={`bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl shadow-2xl ${maxWidthClasses[maxWidth]} w-full border-2 border-gray-700`}
               role="dialog"
               aria-modal="true"
               aria-labelledby={title ? 'modal-title' : undefined}

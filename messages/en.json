@@ -4,7 +4,8 @@
     "subtitle": "Chinese Traditional Sliding Block Puzzle",
     "description": "Move blocks to help Cao Cao escape through Huarong Pass",
     "loading": "Loading...",
-    "caocao": "Cao Cao"
+    "caocao": "Cao Cao",
+    "close": "Close"
   },
   "difficulty": {
     "easy": "Easy",
@@ -93,6 +94,20 @@
     "horizontal": "Horizontal General",
     "soldier": "Soldier",
     "unknown": "Unknown Block"
+  },
+  "history": {
+    "title": "Completion History",
+    "viewHistory": "View History",
+    "completedCount": "Completed: {count}/{total}",
+    "noRecords": "No completion records yet",
+    "levelNumber": "Level {level}",
+    "moves": "Moves",
+    "duration": "Duration",
+    "completedAt": "Completed At",
+    "replay": "Replay",
+    "sortByTime": "Sort by Time",
+    "sortByMoves": "Sort by Moves",
+    "sortByDuration": "Sort by Duration"
   }
 }
 

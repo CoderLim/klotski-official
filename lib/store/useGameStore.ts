@@ -24,7 +24,7 @@ interface GameState {
   historyIndex: number;
   
   // Actions
-  loadPuzzle: (slug: string) => void;
+  loadPuzzle: (slug: string, isReplay?: boolean) => void;
   loadCustomBoard: (blocks?: BlockData[]) => void;
   moveBlock: (blockId: string, newPosition: Position) => boolean;
   addBlock: (shape: Shape, position: Position) => string | null;
@@ -43,6 +43,8 @@ interface GameState {
 
 const STORAGE_KEY_PREFIX = 'klotski-game-';
 const RECORDS_STORAGE_KEY = 'klotski-completion-records';
+const CURRENT_PUZZLE_KEY = 'klotski-current-puzzle';
+const PREVIOUS_PUZZLE_KEY = 'klotski-previous-puzzle';
 
 export interface CompletionRecord {
   slug: string;
@@ -58,7 +60,7 @@ interface CompletionRecords {
 /**
  * 从 localStorage 加载游戏状态
  */
-function loadGameState(slug: string): Partial<GameState> | null {
+export function loadGameState(slug: string): Partial<GameState> | null {
   if (typeof window === 'undefined') return null;
   
   try {
@@ -165,6 +167,68 @@ export function getAllCompletionRecords(): CompletionRecords {
   }
 }
 
+/**
+ * 保存当前关卡 slug
+ */
+export function saveCurrentPuzzleSlug(slug: string) {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    localStorage.setItem(CURRENT_PUZZLE_KEY, slug);
+  } catch (error) {
+    console.error('保存当前关卡失败:', error);
+  }
+}
+
+/**
+ * 获取当前关卡 slug
+ */
+export function getCurrentPuzzleSlug(): string | null {
+  if (typeof window === 'undefined') return null;
+  
+  try {
+    return localStorage.getItem(CURRENT_PUZZLE_KEY);
+  } catch (error) {
+    console.error('获取当前关卡失败:', error);
+    return null;
+  }
+}
+
+/**
+ * 保存之前正在玩的关卡 slug（用于 replay 场景）
+ */
+export function savePreviousPuzzleSlug(slug: string) {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    localStorage.setItem(PREVIOUS_PUZZLE_KEY, slug);
+  } catch (error) {
+    console.error('保存之前关卡失败:', error);
+  }
+}
+
+/**
+ * 获取之前正在玩的关卡 slug
+ */
+export function getPreviousPuzzleSlug(): string | null {
+  if (typeof window === 'undefined') return null;
+  
+  try {
+    return localStorage.getItem(PREVIOUS_PUZZLE_KEY);
+  } catch (error) {
+    console.error('获取之前关卡失败:', error);
+    return null;
+  }
+}
+
+/**
+ * 清除之前正在玩的关卡 slug
+ */
+export function clearPreviousPuzzleSlug() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(PREVIOUS_PUZZLE_KEY);
+}
+
 export const useGameStore = create<GameState>()(
   immer((set, get) => ({
     // 初始状态
@@ -180,12 +244,30 @@ export const useGameStore = create<GameState>()(
     historyIndex: -1,
 
     // 加载拼图
-    loadPuzzle: (slug: string) => {
+    loadPuzzle: (slug: string, isReplay: boolean = false) => {
       const puzzle = getPuzzleBySlug(slug);
       if (!puzzle) {
         console.error(`拼图未找到: ${slug}`);
         return;
       }
+
+      const state = get();
+      
+      // 如果是 replay，先保存当前正在玩的关卡（如果存在且不是已完成的）
+      if (isReplay && state.currentPuzzle && state.currentPuzzle.slug !== slug) {
+        const currentSlug = state.currentPuzzle.slug;
+        const currentSavedState = loadGameState(currentSlug);
+        // 如果当前关卡有进度且未完成，保存为之前正在玩的关卡
+        if (currentSavedState && currentSavedState.blocks && !checkWin(currentSavedState.blocks)) {
+          savePreviousPuzzleSlug(currentSlug);
+        }
+      } else if (!isReplay) {
+        // 如果不是 replay（正常进入下一关等），清除之前正在玩的关卡
+        clearPreviousPuzzleSlug();
+      }
+
+      // 保存当前关卡
+      saveCurrentPuzzleSlug(slug);
 
       // 尝试加载保存的进度
       const savedState = loadGameState(slug);
@@ -201,7 +283,13 @@ export const useGameStore = create<GameState>()(
           // 恢复保存的状态（仅当未胜利时）
           state.blocks = savedState.blocks || initializeBlocks(puzzle);
           state.moves = savedState.moves || 0;
-          state.startTime = savedState.startTime || null;
+          // 调整 startTime，使其基于当前时间减去已保存的 elapsedTime
+          // 这样关闭页面期间的时间不会被计入
+          if (savedState.startTime && savedState.elapsedTime !== undefined) {
+            state.startTime = Date.now() - (savedState.elapsedTime * 1000);
+          } else {
+            state.startTime = savedState.startTime || null;
+          }
           state.elapsedTime = savedState.elapsedTime || 0;
           state.history = savedState.history || [];
           state.historyIndex = savedState.historyIndex ?? -1;
@@ -297,6 +385,8 @@ export const useGameStore = create<GameState>()(
             ? Math.floor((Date.now() - newState.startTime) / 1000)
             : newState.elapsedTime;
           saveCompletionRecord(currentPuzzleSlug, newState.moves, finalTime);
+          // 完成关卡后，清除之前正在玩的关卡（因为已经完成了当前关卡）
+          clearPreviousPuzzleSlug();
         }
       }
 

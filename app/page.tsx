@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useGameStore } from '@/lib/store/useGameStore';
+import { useGameStore, getCurrentPuzzleSlug, getPreviousPuzzleSlug, loadGameState } from '@/lib/store/useGameStore';
 import { getAllPuzzles } from '@/lib/puzzles';
 import { crazyGamesSDK } from '@/lib/utils/crazygames';
 import HUD from '@/components/ui/HUD';
@@ -40,11 +40,29 @@ export default function HomePage() {
     });
   }, []);
 
-  // 加载第一个拼图
+  // 加载拼图（优先加载保存的当前关卡）
   useEffect(() => {
     const allPuzzles = getAllPuzzles();
     if (allPuzzles.length > 0 && !currentPuzzle) {
-      loadPuzzle(allPuzzles[0].slug);
+      // 尝试加载保存的当前关卡
+      const savedSlug = getCurrentPuzzleSlug();
+      let puzzleToLoad = savedSlug && allPuzzles.find(p => p.slug === savedSlug)
+        ? savedSlug
+        : allPuzzles[0].slug;
+      
+      // 如果当前关卡没有进度（可能是从历史记录 replay 但未完成），尝试恢复之前正在玩的关卡
+      if (savedSlug) {
+        const savedState = loadGameState(savedSlug);
+        // 如果没有保存的状态，说明可能是 replay 后未完成就离开了
+        if (!savedState || !savedState.blocks) {
+          const previousSlug = getPreviousPuzzleSlug();
+          if (previousSlug && allPuzzles.find(p => p.slug === previousSlug)) {
+            puzzleToLoad = previousSlug;
+          }
+        }
+      }
+      
+      loadPuzzle(puzzleToLoad);
     }
   }, [loadPuzzle, currentPuzzle]);
 
