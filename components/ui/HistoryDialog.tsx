@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import Modal from './Modal';
 import PuzzlePreview from '@/components/game/PuzzlePreview';
 import { getAllCompletionRecords, CompletionRecord } from '@/lib/store/useGameStore';
-import { getAllPuzzles, getPuzzleBySlug, getPuzzleIndex } from '@/lib/puzzles';
+import { getAllPuzzles, getPuzzleBySlug, getPuzzleIndex, PuzzleConfig } from '@/lib/puzzles';
 import { formatTime } from '@/lib/utils/grid';
 
 interface HistoryDialogProps {
@@ -34,7 +34,7 @@ export default function HistoryDialog({ isOpen, onClose, onSelectPuzzle }: Histo
           puzzle,
         };
       })
-      .filter((item): item is { record: CompletionRecord; puzzle: ReturnType<typeof getPuzzleBySlug> } => item !== null);
+      .filter((item): item is { record: CompletionRecord; puzzle: PuzzleConfig } => item !== null);
     
     // 按完成时间倒序排列（最新的在前）
     recordsList.sort((a, b) => b.record.completedAt - a.record.completedAt);
