@@ -2,6 +2,9 @@ import { PuzzleConfig, validatePuzzleConfig } from './types';
 import { getColorByShape } from '../utils/colors';
 import { BlockData } from './types';
 
+// 重新导出类型，方便外部使用
+export type { PuzzleConfig, BlockData, Shape, Position, MoveHistory } from './types';
+
 /**
  * 拼图配置数据库
  * 包含经典华容道布局

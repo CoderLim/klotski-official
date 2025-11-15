@@ -4,7 +4,8 @@
     "subtitle": "中国传统益智游戏",
     "description": "移动方块让曹操从华容道逃脱",
     "loading": "加载中...",
-    "caocao": "曹操"
+    "caocao": "曹操",
+    "close": "关闭"
   },
   "difficulty": {
     "easy": "简单",
@@ -93,6 +94,20 @@
     "horizontal": "横将",
     "soldier": "小兵",
     "unknown": "未知方块"
+  },
+  "history": {
+    "title": "通关历史记录",
+    "viewHistory": "查看历史记录",
+    "completedCount": "已通关关卡: {count}/{total}",
+    "noRecords": "暂无通关记录",
+    "levelNumber": "第 {level} 关",
+    "moves": "步数",
+    "duration": "用时",
+    "completedAt": "完成时间",
+    "replay": "重新挑战",
+    "sortByTime": "按时间排序",
+    "sortByMoves": "按步数排序",
+    "sortByDuration": "按用时排序"
   }
 }
 
