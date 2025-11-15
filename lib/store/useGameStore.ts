@@ -89,11 +89,18 @@ function saveGameState(slug: string, state: GameState) {
   if (typeof window === 'undefined') return;
   
   try {
+    // 如果游戏正在进行（有 startTime 且未胜利），计算当前的 elapsedTime
+    // 而不是使用可能过时的 state.elapsedTime（只在移动时更新）
+    let currentElapsedTime = state.elapsedTime;
+    if (state.startTime && !state.isWin) {
+      currentElapsedTime = Math.floor((Date.now() - state.startTime) / 1000);
+    }
+    
     const data = {
       blocks: state.blocks,
       moves: state.moves,
       startTime: state.startTime,
-      elapsedTime: state.elapsedTime,
+      elapsedTime: currentElapsedTime,
       history: state.history,
       historyIndex: state.historyIndex,
     };
@@ -227,6 +234,18 @@ export function getPreviousPuzzleSlug(): string | null {
 export function clearPreviousPuzzleSlug() {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(PREVIOUS_PUZZLE_KEY);
+}
+
+/**
+ * 保存当前游戏状态（用于页面关闭前自动保存）
+ */
+export function saveCurrentGameState() {
+  if (typeof window === 'undefined') return;
+  
+  const state = useGameStore.getState();
+  if (state.currentPuzzle) {
+    saveGameState(state.currentPuzzle.slug, state);
+  }
 }
 
 export const useGameStore = create<GameState>()(

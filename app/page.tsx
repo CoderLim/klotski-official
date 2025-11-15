@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useGameStore, getCurrentPuzzleSlug, getPreviousPuzzleSlug, loadGameState } from '@/lib/store/useGameStore';
+import { useGameStore, getCurrentPuzzleSlug, getPreviousPuzzleSlug, loadGameState, saveCurrentGameState } from '@/lib/store/useGameStore';
 import { getAllPuzzles } from '@/lib/puzzles';
 import { crazyGamesSDK } from '@/lib/utils/crazygames';
 import HUD from '@/components/ui/HUD';
@@ -104,6 +104,28 @@ export default function HomePage() {
     window.addEventListener('keydown', handleGlobalKeys);
     return () => window.removeEventListener('keydown', handleGlobalKeys);
   }, [undo, redo, t]);
+
+  // 页面关闭前自动保存游戏状态
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      saveCurrentGameState();
+    };
+
+    const handleVisibilityChange = () => {
+      // 当页面变为隐藏时（切换标签页、最小化等），保存状态
+      if (document.hidden) {
+        saveCurrentGameState();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   // 处理下一关
   const handleNextLevel = () => {
