@@ -317,3 +317,5 @@ Made with ❤️ by [Your Name]
 [报告 Bug](https://github.com/your-username/klotski-official/issues) · [功能建议](https://github.com/your-username/klotski-official/issues)
 
 </div>
+
+[知乎](https://link.zhihu.com/?target=https://klotski.org)
